@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Eight Digital Battlegrounds - Platform Defense Network</title>
     <style>
         * {
@@ -10,7 +10,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,7 +17,6 @@
             overflow: hidden;
             cursor: pointer;
         }
-
         .battleground-network {
             position: relative;
             width: 100vw;
@@ -27,7 +25,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .title-overlay {
             position: absolute;
             top: 30px;
@@ -37,7 +34,6 @@
             color: white;
             z-index: 100;
         }
-
         .main-title {
             font-size: 2.5rem;
             font-weight: bold;
@@ -45,25 +41,21 @@
             margin-bottom: 0.5rem;
             animation: titleGlow 3s infinite alternate;
         }
-
         .subtitle {
             font-size: 1.2rem;
             opacity: 0.9;
             text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
             color: #ff6b6b;
         }
-
         @keyframes titleGlow {
             0% { text-shadow: 0 0 30px rgba(255, 0, 0, 0.6); }
             100% { text-shadow: 0 0 50px rgba(255, 0, 0, 0.9), 0 0 70px rgba(255, 0, 0, 0.4); }
         }
-
         .network-container {
             position: relative;
             width: 800px;
             height: 600px;
         }
-
         .battleground-node {
             position: absolute;
             width: 120px;
@@ -82,36 +74,29 @@
             animation: nodeFloat 4s infinite ease-in-out;
             backdrop-filter: blur(10px);
         }
-
         .battleground-node:hover {
             transform: scale(1.1);
             filter: brightness(1.3);
             z-index: 10;
         }
-
         .node-icon {
             font-size: 40px;
             margin-bottom: 8px;
             animation: iconPulse 2s infinite ease-in-out;
         }
-
         .node-label {
             font-size: 12px;
             line-height: 1.2;
             text-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
-
         @keyframes nodeFloat {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
-
         @keyframes iconPulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
-
-        /* Individual Node Styles */
         .youtube-node {
             top: 50px;
             left: 340px;
@@ -120,7 +105,6 @@
             box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
             animation-delay: 0s;
         }
-
         .airline-node {
             top: 150px;
             left: 580px;
@@ -129,7 +113,6 @@
             box-shadow: 0 0 30px rgba(0, 123, 255, 0.5);
             animation-delay: 0.2s;
         }
-
         .newspaper-node {
             top: 350px;
             left: 600px;
@@ -138,7 +121,6 @@
             box-shadow: 0 0 30px rgba(108, 117, 125, 0.5);
             animation-delay: 0.4s;
         }
-
         .audio-node {
             top: 450px;
             left: 340px;
@@ -147,7 +129,6 @@
             box-shadow: 0 0 30px rgba(30, 215, 96, 0.5);
             animation-delay: 0.6s;
         }
-
         .ticket-node {
             top: 350px;
             left: 80px;
@@ -156,7 +137,6 @@
             box-shadow: 0 0 30px rgba(2, 108, 223, 0.5);
             animation-delay: 0.8s;
         }
-
         .cloud-node {
             top: 150px;
             left: 100px;
@@ -165,7 +145,6 @@
             box-shadow: 0 0 30px rgba(255, 165, 0, 0.5);
             animation-delay: 1s;
         }
-
         .legal-node {
             top: 250px;
             left: 50px;
@@ -174,7 +153,6 @@
             box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
             animation-delay: 1.2s;
         }
-
         .security-node {
             top: 250px;
             left: 630px;
@@ -183,8 +161,6 @@
             box-shadow: 0 0 30px rgba(255, 20, 147, 0.5);
             animation-delay: 1.4s;
         }
-
-        /* Circuit Connection Lines */
         .circuit-line {
             position: absolute;
             stroke: #00ffff;
@@ -194,26 +170,22 @@
             animation: circuitFlow 4s infinite;
             filter: drop-shadow(0 0 5px #00ffff);
         }
-
         .circuit-line.active {
             stroke: #ff0080;
             stroke-width: 3;
             opacity: 1;
             animation: activeCircuitFlow 2s infinite;
         }
-
         @keyframes circuitFlow {
             0% { stroke-dasharray: 0 20; }
             50% { stroke-dasharray: 10 10; }
             100% { stroke-dasharray: 20 0; }
         }
-
         @keyframes activeCircuitFlow {
             0% { stroke-dasharray: 0 15; opacity: 1; }
             50% { stroke-dasharray: 7 8; opacity: 0.8; }
             100% { stroke-dasharray: 15 0; opacity: 1; }
         }
-
         .connection-pulse {
             position: absolute;
             width: 8px;
@@ -223,15 +195,12 @@
             animation: pulseThroughCircuit 6s infinite linear;
             box-shadow: 0 0 10px #00ffff;
         }
-
         @keyframes pulseThroughCircuit {
             0% { opacity: 0; transform: scale(0.5); }
             10% { opacity: 1; transform: scale(1); }
             90% { opacity: 1; transform: scale(1); }
             100% { opacity: 0; transform: scale(0.5); }
         }
-
-        /* Battle Stats Panel */
         .battle-stats {
             position: absolute;
             bottom: 50px;
@@ -244,12 +213,10 @@
             color: white;
             animation: statsGlow 3s infinite alternate;
         }
-
         @keyframes statsGlow {
             0% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
             100% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.6); }
         }
-
         .stats-title {
             color: #ff6b6b;
             font-size: 18px;
@@ -259,7 +226,6 @@
             border-bottom: 1px solid #333;
             padding-bottom: 8px;
         }
-
         .stat-item {
             display: flex;
             justify-content: space-between;
@@ -268,29 +234,23 @@
             opacity: 0;
             animation: statSlideIn 0.8s ease-out forwards;
         }
-
         .stat-item:nth-child(2) { animation-delay: 0.2s; }
         .stat-item:nth-child(3) { animation-delay: 0.4s; }
         .stat-item:nth-child(4) { animation-delay: 0.6s; }
         .stat-item:nth-child(5) { animation-delay: 0.8s; }
         .stat-item:nth-child(6) { animation-delay: 1.0s; }
-
         @keyframes statSlideIn {
             0% { opacity: 0; transform: translateX(-20px); }
             100% { opacity: 1; transform: translateX(0); }
         }
-
         .stat-value {
             color: #00ff88;
             font-weight: bold;
         }
-
         .stat-danger {
             color: #ff6b6b;
             font-weight: bold;
         }
-
-        /* Defense Metrics */
         .defense-panel {
             position: absolute;
             bottom: 50px;
@@ -303,12 +263,10 @@
             color: white;
             animation: defenseGlow 3s infinite alternate;
         }
-
         @keyframes defenseGlow {
             0% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.3); }
             100% { box-shadow: 0 0 40px rgba(255, 107, 107, 0.6); }
         }
-
         .defense-title {
             color: #ff6b6b;
             font-size: 18px;
@@ -318,14 +276,12 @@
             border-bottom: 1px solid #333;
             padding-bottom: 8px;
         }
-
         .threat-level {
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 15px 0;
         }
-
         .threat-indicator {
             width: 80px;
             height: 80px;
@@ -337,19 +293,16 @@
             position: relative;
             animation: threatSpin 4s infinite linear;
         }
-
         @keyframes threatSpin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
         .threat-percentage {
             font-size: 20px;
             font-weight: bold;
             color: #ff0000;
             position: absolute;
         }
-
         .click-hint {
             position: absolute;
             top: 100px;
@@ -359,13 +312,10 @@
             opacity: 0.8;
             animation: clickPulse 2s infinite;
         }
-
         @keyframes clickPulse {
             0%, 100% { opacity: 0.8; }
             50% { opacity: 1; }
         }
-
-        /* Popup info on hover */
         .node-popup {
             position: absolute;
             bottom: 130px;
@@ -383,17 +333,13 @@
             white-space: nowrap;
             z-index: 20;
         }
-
         .battleground-node:hover .node-popup {
             opacity: 1;
         }
-
-        /* Animation entrance for nodes */
         .battleground-node {
             opacity: 0;
             animation: nodeSlideIn 1s ease-out forwards, nodeFloat 4s infinite ease-in-out;
         }
-
         .youtube-node { animation-delay: 0.2s, 0s; }
         .airline-node { animation-delay: 0.4s, 0.2s; }
         .newspaper-node { animation-delay: 0.6s, 0.4s; }
@@ -402,7 +348,6 @@
         .cloud-node { animation-delay: 1.2s, 1.0s; }
         .legal-node { animation-delay: 1.4s, 1.2s; }
         .security-node { animation-delay: 1.6s, 1.4s; }
-
         @keyframes nodeSlideIn {
             0% { opacity: 0; transform: translateY(30px) scale(0.8); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -411,73 +356,52 @@
 </head>
 <body>
     <div class="battleground-network" onclick="openGitHub()">
-        <!-- Title -->
         <div class="title-overlay">
             <div class="main-title">DIGITAL BATTLEGROUNDS</div>
             <div class="subtitle">Platform Defense Network</div>
         </div>
-
-        <!-- Network Container -->
         <div class="network-container">
-            <!-- YouTube Node -->
             <div class="battleground-node youtube-node">
                 <div class="node-icon">🔴</div>
-                <div class="node-label">YouTube<br>AI Purge</div>
+                <div class="node-label">YouTube<br />AI Purge</div>
                 <div class="node-popup">340K channels demonetized • $1.2B revenue lost</div>
             </div>
-
-            <!-- Airline Node -->
             <div class="battleground-node airline-node">
                 <div class="node-icon">✈️</div>
-                <div class="node-label">Airline<br>Bot Gates</div>
+                <div class="node-label">Airline<br />Bot Gates</div>
                 <div class="node-popup">Bot success rate: 89% → 23% • $200M defense systems</div>
             </div>
-
-            <!-- Newspaper Node -->
             <div class="battleground-node newspaper-node">
                 <div class="node-icon">📰</div>
-                <div class="node-label">Publisher<br>CAPTCHAs</div>
+                <div class="node-label">Publisher<br />CAPTCHAs</div>
                 <div class="node-popup">95% scrapers blocked • $300M licensing revenue</div>
             </div>
-
-            <!-- Audio Node -->
             <div class="battleground-node audio-node">
                 <div class="node-icon">🎧</div>
-                <div class="node-label">Spotify<br>Audio Waves</div>
+                <div class="node-label">Spotify<br />Audio Waves</div>
                 <div class="node-popup">2M AI tracks removed • $180M creator payouts lost</div>
             </div>
-
-            <!-- Ticket Node -->
             <div class="battleground-node ticket-node">
                 <div class="node-icon">🎟️</div>
-                <div class="node-label">Ticketmaster<br>Virtual Queues</div>
+                <div class="node-label">Ticketmaster<br />Virtual Queues</div>
                 <div class="node-popup">73% bot scalping reduction • 34% fan satisfaction spike</div>
             </div>
-
-            <!-- Cloud Node -->
             <div class="battleground-node cloud-node">
                 <div class="node-icon">☁️</div>
-                <div class="node-label">Cloudflare<br>Pay-Per-Crawl</div>
+                <div class="node-label">Cloudflare<br />Pay-Per-Crawl</div>
                 <div class="node-popup">200+ sites • $400M revenue • Bot monetization</div>
             </div>
-
-            <!-- Legal Node -->
             <div class="battleground-node legal-node">
                 <div class="node-icon">⚖️</div>
-                <div class="node-label">Legal<br>Precedents</div>
+                <div class="node-label">Legal<br />Precedents</div>
                 <div class="node-popup">Southwest vs Outtask • Clear scraping laws • $50M fees</div>
             </div>
-
-            <!-- Security Node -->
             <div class="battleground-node security-node">
                 <div class="node-icon">🔒</div>
-                <div class="node-label">Data Lock<br>Security</div>
+                <div class="node-label">Data Lock<br />Security</div>
                 <div class="node-popup">LinkedIn & Amazon shields • $200M security investment</div>
             </div>
-
-            <!-- Circuit Lines SVG -->
             <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;">
-                <!-- Central hub connections -->
                 <path class="circuit-line active" d="M 400 110 Q 450 150 520 200" />
                 <path class="circuit-line" d="M 400 110 Q 350 150 280 200" />
                 <path class="circuit-line active" d="M 520 200 Q 580 250 620 300" />
@@ -486,15 +410,11 @@
                 <path class="circuit-line" d="M 280 400 Q 200 350 140 300" />
                 <path class="circuit-line active" d="M 140 300 Q 120 250 140 200" />
                 <path class="circuit-line" d="M 140 200 Q 200 150 280 130" />
-                
-                <!-- Cross connections -->
                 <path class="circuit-line" d="M 280 200 Q 400 280 520 200" />
                 <path class="circuit-line active" d="M 620 300 Q 580 350 520 400" />
                 <path class="circuit-line" d="M 140 300 Q 200 280 280 300" />
                 <path class="circuit-line active" d="M 400 450 Q 450 400 500 350" />
             </svg>
-
-            <!-- Connection Pulses -->
             <div class="connection-pulse" style="left: 450px; top: 180px; animation-delay: 0s;"></div>
             <div class="connection-pulse" style="left: 350px; top: 180px; animation-delay: 1s;"></div>
             <div class="connection-pulse" style="left: 550px; top: 250px; animation-delay: 2s;"></div>
@@ -502,8 +422,6 @@
             <div class="connection-pulse" style="left: 310px; top: 390px; animation-delay: 4s;"></div>
             <div class="connection-pulse" style="left: 170px; top: 280px; animation-delay: 5s;"></div>
         </div>
-
-        <!-- Battle Statistics -->
         <div class="battle-stats">
             <div class="stats-title">⚔️ Battle Statistics</div>
             <div class="stat-item">
@@ -527,8 +445,6 @@
                 <span class="stat-danger">50+</span>
             </div>
         </div>
-
-        <!-- Defense Panel -->
         <div class="defense-panel">
             <div class="defense-title">🛡️ Defense Level</div>
             <div class="threat-level">
@@ -541,54 +457,36 @@
                 <div style="margin-top: 5px; opacity: 0.8;">Platforms actively defending</div>
             </div>
         </div>
-
-        <!-- Click Hint -->
         <div class="click-hint">Click to explore the automation war →</div>
     </div>
-
     <script>
         function openGitHub() {
-            // Replace with your actual GitHub repo URL
             window.open('https://github.com/klakshman318/ai-automation-war', '_blank');
         }
-
-        // Dynamic circuit activation
         function activateRandomCircuit() {
             const circuits = document.querySelectorAll('.circuit-line');
-            
-            // Deactivate all
             circuits.forEach(circuit => circuit.classList.remove('active'));
-            
-            // Activate random circuits
             const activeCount = Math.floor(Math.random() * 4) + 2;
             const shuffled = Array.from(circuits).sort(() => 0.5 - Math.random());
-            
             for (let i = 0; i < activeCount; i++) {
                 shuffled[i].classList.add('active');
             }
         }
-
-        // Update threat level
         function updateThreatLevel() {
             const percentage = document.querySelector('.threat-percentage');
             const indicator = document.querySelector('.threat-indicator');
-            
-            const newLevel = Math.floor(Math.random() * 20) + 70; // 70-90%
+            const newLevel = Math.floor(Math.random() * 20) + 70;
             percentage.textContent = newLevel + '%';
-            
             const rotation = (newLevel / 100) * 360;
             const gradient = `conic-gradient(#ff0000 0deg ${rotation}deg, #333 ${rotation}deg 360deg)`;
             indicator.style.background = gradient;
         }
-
-        // Update battle stats
         function updateBattleStats() {
             const stats = [
                 { element: document.querySelectorAll('.stat-value')[0], base: 340000, variance: 1000 },
                 { element: document.querySelectorAll('.stat-value')[1], base: 2000000, variance: 50000 },
                 { element: document.querySelectorAll('.stat-danger')[2], base: 50, variance: 5 }
             ];
-            
             stats.forEach(stat => {
                 if (stat.element) {
                     const newValue = stat.base + Math.floor(Math.random() * stat.variance);
@@ -602,14 +500,10 @@
                 }
             });
         }
-
-        // Add random connection pulses
         function createConnectionPulse() {
             const container = document.querySelector('.network-container');
             const pulse = document.createElement('div');
             pulse.className = 'connection-pulse';
-            
-            // Random position along circuit paths
             const positions = [
                 { left: '450px', top: '180px' },
                 { left: '350px', top: '180px' },
@@ -620,23 +514,17 @@
                 { left: '500px', top: '350px' },
                 { left: '250px', top: '280px' }
             ];
-            
             const randomPos = positions[Math.floor(Math.random() * positions.length)];
             pulse.style.left = randomPos.left;
             pulse.style.top = randomPos.top;
             pulse.style.animationDelay = '0s';
-            
             container.appendChild(pulse);
-            
             setTimeout(() => {
                 pulse.remove();
             }, 6000);
         }
-
-        // Node interaction effects
         document.querySelectorAll('.battleground-node').forEach(node => {
             node.addEventListener('mouseenter', function() {
-                // Activate nearby circuits
                 const circuits = document.querySelectorAll('.circuit-line');
                 circuits.forEach(circuit => {
                     if (Math.random() > 0.5) {
@@ -644,22 +532,16 @@
                     }
                 });
             });
-            
             node.addEventListener('mouseleave', function() {
-                // Deactivate some circuits
                 setTimeout(() => {
                     activateRandomCircuit();
                 }, 500);
             });
         });
-
-        // Start dynamic updates
         setInterval(activateRandomCircuit, 3000);
         setInterval(updateThreatLevel, 5000);
         setInterval(updateBattleStats, 4000);
         setInterval(createConnectionPulse, 1500);
-
-        // Initial updates
         setTimeout(activateRandomCircuit, 1000);
         setTimeout(updateThreatLevel, 2000);
     </script>

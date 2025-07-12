@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic Digital Battlefield</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+            color: #00ffff;
+        }
+
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        #ui-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .ui-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ffff;
+            color: #00ffff;
+        }
+
+        .ui-controls {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #88ffff;
+        }
+
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+            text-align: center;
+            color: #00ffff;
+            font-size: 24px;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(0, 255, 255, 0.3);
+            border-top: 3px solid #00ffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #stats {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ff0080;
+            font-size: 12px;
+            color: #ff0080;
+        }
+
+        #main-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.4);
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+        }
+
+        .title-main {
+            font-size: 36px;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        .title-subtitle {
+            font-size: 16px;
+            color: #88ffff;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #88ffff;
+        }
+
+        .enter-button {
+            background: linear-gradient(45deg, #ff0080, #00ffff);
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(255, 0, 128, 0.4);
+            font-family: 'Courier New', monospace;
+        }
+
+        .enter-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(255, 0, 128, 0.6), 0 0 50px rgba(0, 255, 255, 0.4);
+        }
+
+        .enter-button:active {
+            transform: scale(0.98);
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px #00ffff; }
+            100% { text-shadow: 0 0 30px #00ffff, 0 0 40px #00ffff; }
+        }
+
+        .title-hidden {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+            transition: all 0.5s ease;
+            pointer-events: none;
+        }
+
+        canvas {
+            display: block;
+            cursor: grab;
+        }
+
+        canvas:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="loading">
+            <div class="loading-spinner"></div>
+            <div>INITIALIZING BATTLEFIELD...</div>
+        </div>
+
+        <div id="main-title">
+            <div class="title-main">THE GREAT AI AUTOMATION WAR</div>
+            <div class="title-subtitle">Right now, while you read this, millions of AI agents are battling tech platforms in a digital war that's reshaping our entire online world.</div>
+            <button class="enter-button" onclick="enterBattlefield()">Enter the Battlefield →</button>
+        </div>
+
+        <div id="ui-overlay">
+            <div class="ui-title">BATTLEFIELD CONTROLS</div>
+            <div class="ui-controls">
+                Mouse: Orbit Camera<br>
+                Scroll: Zoom In/Out<br>
+                Click: Focus Target<br>
+                Space: Auto-rotate
+            </div>
+        </div>
+
+        <div id="stats">
+            <div>FPS: <span id="fps">0</span></div>
+            <div>Objects: <span id="objects">0</span></div>
+            <div>Particles: <span id="particles">0</span></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        class FuturisticBattlefield {
+            constructor() {
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.controls = null;
+                this.bots = [];
+                this.logos = [];
+                this.particles = [];
+                this.dataStreams = [];
+                this.mouse = new THREE.Vector2();
+                this.raycaster = new THREE.Raycaster();
+                this.clock = new THREE.Clock();
+                this.autoRotate = false;
+                this.stats = { fps: 0, objects: 0, particles: 0 };
+                
+                this.init();
+            }
+
+            init() {
+                this.setupScene();
+                this.setupLighting();
+                this.setupCamera();
+                this.setupRenderer();
+                this.setupControls();
+                this.createBattlefield();
+                this.setupEventListeners();
+                this.animate();
+                
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 2000);
+            }
+
+            setupScene() {
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x000011);
+                this.scene.fog = new THREE.Fog(0x000011, 50, 200);
+            }
+
+            setupLighting() {
+                const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+                this.scene.add(ambientLight);
+
+                const directionalLight = new THREE.DirectionalLight(0x00ffff, 0.8);
+                directionalLight.position.set(50, 50, 50);
+                directionalLight.castShadow = true;
+                this.scene.add(directionalLight);
+
+                const colors = [0x00ffff, 0xff0080, 0x80ff00, 0xffff00];
+                for (let i = 0; i < 4; i++) {
+                    const light = new THREE.PointLight(colors[i], 1, 100);
+                    light.position.set(
+                        Math.cos(i * Math.PI / 2) * 40,
+                        20,
+                        Math.sin(i * Math.PI / 2) * 40
+                    );
+                    this.scene.add(light);
+                }
+            }
+
+            setupCamera() {
+                this.camera = new THREE.PerspectiveCamera(
+                    75,
+                    window.innerWidth / window.innerHeight,
+                    0.1,
+                    1000
+                );
+                this.camera.position.set(0, 30, 50);
+                this.camera.lookAt(0, 0, 0);
+            }
+
+            setupRenderer() {
+                this.renderer = new THREE.WebGLRenderer({ antialias: true });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.renderer.setClearColor(0x000011);
+                document.getElementById('container').appendChild(this.renderer.domElement);
+            }
+
+            setupControls() {
+
+                this.controls = {
+                    isDown: false,
+                    mouseX: 0,
+                    mouseY: 0,
+                    rotationX: 0,
+                    rotationY: 0,
+                    distance: 80,
+                    target: new THREE.Vector3(0, 0, 0)
+                };
+            }
+
+            createBattlefield() {
+                this.createGround();
+                this.createBots();
+                this.createLogos();
+                this.createDataStreams();
+                this.createParticleSystem();
+            }
+
+            createGround() {
+                const groundGeometry = new THREE.PlaneGeometry(200, 200, 32, 32);
+                const groundMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x001122,
+                    transparent: true,
+                    opacity: 0.8,
+                    wireframe: false
+                });
+                
+                const gridMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x00ffff,
+                    transparent: true,
+                    opacity: 0.3,
+                    wireframe: true
+                });
+
+                const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+                const grid = new THREE.Mesh(groundGeometry, gridMaterial);
+                
+                ground.rotation.x = -Math.PI / 2;
+                grid.rotation.x = -Math.PI / 2;
+                grid.position.y = 0.1;
+
+                this.scene.add(ground);
+                this.scene.add(grid);
+            }
+
+            createBots() {
+                for (let i = 0; i < 12; i++) {
+                    const bot = this.createBot();
+                    bot.position.set(
+                        (Math.random() - 0.5) * 80,
+                        0,
+                        (Math.random() - 0.5) * 80
+                    );
+                    bot.userData = {
+                        speed: 0.02 + Math.random() * 0.03,
+                        direction: Math.random() * Math.PI * 2,
+                        type: 'bot'
+                    };
+                    this.bots.push(bot);
+                    this.scene.add(bot);
+                }
+            }
+
+            createBot() {
+                const group = new THREE.Group();
+
+                const bodyGeometry = new THREE.BoxGeometry(2, 3, 1);
+                const bodyMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x333333,
+                    emissive: 0x004444,
+                    shininess: 100
+                });
+                const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+                body.position.y = 1.5;
+                group.add(body);
+
+                const headGeometry = new THREE.SphereGeometry(0.8, 16, 16);
+                const headMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x666666,
+                    emissive: 0x006666,
+                    shininess: 100
+                });
+                const head = new THREE.Mesh(headGeometry, headMaterial);
+                head.position.y = 4;
+                group.add(head);
+
+                const eyeGeometry = new THREE.SphereGeometry(0.2, 8, 8);
+                const eyeMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x00ffff,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                
+                const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+                leftEye.position.set(-0.3, 4, 0.6);
+                const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+                rightEye.position.set(0.3, 4, 0.6);
+                
+                group.add(leftEye);
+                group.add(rightEye);
+
+                const armGeometry = new THREE.CylinderGeometry(0.2, 0.2, 2);
+                const armMaterial = new THREE.MeshPhongMaterial({
+                    color: 0x444444,
+                    emissive: 0x002222
+                });
+                
+                const leftArm = new THREE.Mesh(armGeometry, armMaterial);
+                leftArm.position.set(-1.5, 2, 0);
+                const rightArm = new THREE.Mesh(armGeometry, armMaterial);
+                rightArm.position.set(1.5, 2, 0);
+                
+                group.add(leftArm);
+                group.add(rightArm);
+
+                const glowGeometry = new THREE.SphereGeometry(3, 16, 16);
+                const glowMaterial = new THREE.MeshBasicMaterial({
+                    color: 0x00ffff,
+                    transparent: true,
+                    opacity: 0.1
+                });
+                const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+                glow.position.y = 2;
+                group.add(glow);
+
+                return group;
+            }
+
+            createLogos() {
+                const logoData = [
+                    { name: 'YouTube', color: 0xff0000, position: [-30, 15, -20] },
+                    { name: 'Spotify', color: 0x1db954, position: [30, 15, -20] },
+                    { name: 'Ticketmaster', color: 0x0066cc, position: [0, 15, -40] }
+                ];
+
+                logoData.forEach(data => {
+                    const logo = this.createLogo(data.name, data.color);
+                    logo.position.set(...data.position);
+                    logo.userData = {
+                        originalY: data.position[1],
+                        type: 'logo',
+                        name: data.name
+                    };
+                    this.logos.push(logo);
+                    this.scene.add(logo);
+                });
+            }
+
+            createLogo(name, color) {
+                const group = new THREE.Group();
+
+                const logoGeometry = new THREE.BoxGeometry(8, 12, 2);
+                const logoMaterial = new THREE.MeshPhongMaterial({
+                    color: color,
+                    emissive: new THREE.Color(color).multiplyScalar(0.3),
+                    shininess: 100
+                });
+                const logoMesh = new THREE.Mesh(logoGeometry, logoMaterial);
+                group.add(logoMesh);
+
+                const textGeometry = new THREE.PlaneGeometry(6, 2);
+                const textMaterial = new THREE.MeshBasicMaterial({
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.9
+                });
+                const text = new THREE.Mesh(textGeometry, textMaterial);
+                text.position.set(0, 0, 1.1);
+                group.add(text);
+
+                const glowGeometry = new THREE.BoxGeometry(10, 14, 4);
+                const glowMaterial = new THREE.MeshBasicMaterial({
+                    color: color,
+                    transparent: true,
+                    opacity: 0.2
+                });
+                const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+                group.add(glow);
+
+                const fieldGeometry = new THREE.SphereGeometry(8, 16, 16);
+                const fieldMaterial = new THREE.MeshBasicMaterial({
+                    color: color,
+                    transparent: true,
+                    opacity: 0.05,
+                    wireframe: true
+                });
+                const field = new THREE.Mesh(fieldGeometry, fieldMaterial);
+                group.add(field);
+
+                return group;
+            }
+
+            createDataStreams() {
+                for (let i = 0; i < 20; i++) {
+                    const stream = this.createDataStream();
+                    this.dataStreams.push(stream);
+                    this.scene.add(stream);
+                }
+            }
+
+            createDataStream() {
+                const points = [];
+                const numPoints = 50;
+                
+                for (let i = 0; i < numPoints; i++) {
+                    const x = (Math.random() - 0.5) * 100;
+                    const y = Math.random() * 30 + 5;
+                    const z = (Math.random() - 0.5) * 100;
+                    points.push(new THREE.Vector3(x, y, z));
+                }
+
+                const geometry = new THREE.BufferGeometry().setFromPoints(points);
+                const material = new THREE.LineBasicMaterial({
+                    color: 0x00ffff,
+                    transparent: true,
+                    opacity: 0.6
+                });
+
+                const line = new THREE.Line(geometry, material);
+                line.userData = {
+                    speed: 0.01 + Math.random() * 0.02,
+                    type: 'dataStream'
+                };
+
+                return line;
+            }
+
+            createParticleSystem() {
+                const particleCount = 1000;
+                const particles = new THREE.BufferGeometry();
+                const positions = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+                const sizes = new Float32Array(particleCount);
+
+                for (let i = 0; i < particleCount; i++) {
+                    const i3 = i * 3;
+                    
+                    positions[i3] = (Math.random() - 0.5) * 200;
+                    positions[i3 + 1] = Math.random() * 100;
+                    positions[i3 + 2] = (Math.random() - 0.5) * 200;
+
+                    const color = new THREE.Color();
+                    color.setHSL(Math.random() * 0.6, 1, 0.5);
+                    colors[i3] = color.r;
+                    colors[i3 + 1] = color.g;
+                    colors[i3 + 2] = color.b;
+
+                    sizes[i] = Math.random() * 2 + 1;
+                }
+
+                particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                particles.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+                const particleMaterial = new THREE.PointsMaterial({
+                    size: 2,
+                    transparent: true,
+                    opacity: 0.8,
+                    vertexColors: true,
+                    blending: THREE.AdditiveBlending
+                });
+
+                const particleSystem = new THREE.Points(particles, particleMaterial);
+                particleSystem.userData = { type: 'particles' };
+                this.particles.push(particleSystem);
+                this.scene.add(particleSystem);
+            }
+
+            setupEventListeners() {
+
+                window.addEventListener('mousedown', (event) => {
+                    this.controls.isDown = true;
+                    this.controls.mouseX = event.clientX;
+                    this.controls.mouseY = event.clientY;
+                });
+
+                window.addEventListener('mousemove', (event) => {
+                    if (this.controls.isDown) {
+                        const deltaX = event.clientX - this.controls.mouseX;
+                        const deltaY = event.clientY - this.controls.mouseY;
+                        
+                        this.controls.rotationY += deltaX * 0.01;
+                        this.controls.rotationX += deltaY * 0.01;
+                        
+                        this.controls.rotationX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.controls.rotationX));
+                        
+                        this.controls.mouseX = event.clientX;
+                        this.controls.mouseY = event.clientY;
+                    }
+                });
+
+                window.addEventListener('mouseup', () => {
+                    this.controls.isDown = false;
+                });
+
+                window.addEventListener('wheel', (event) => {
+                    this.controls.distance += event.deltaY * 0.05;
+                    this.controls.distance = Math.max(20, Math.min(150, this.controls.distance));
+                });
+
+                window.addEventListener('keydown', (event) => {
+                    if (event.code === 'Space') {
+                        event.preventDefault();
+                        this.autoRotate = !this.autoRotate;
+                    }
+                });
+
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            enterBattlefield() {
+                const titleElement = document.getElementById('main-title');
+                titleElement.classList.add('title-hidden');
+                
+                setTimeout(() => {
+                    const controlsElement = document.getElementById('ui-overlay');
+                    controlsElement.innerHTML = `
+                        <div class="ui-title"><a href="https://github.com/klakshman318/ai-automation-war/blob/master/ARTICLE.md">ENTER THE BATTLEFIELD</a></div>
+                        <div class="ui-controls">
+                            Mouse: Orbit Camera<br>
+                            Scroll: Zoom In/Out<br>
+                            Click: Focus Target<br>
+                            Space: Auto-rotate
+                        </div>
+                    `;
+                }, 500);
+            }
+
+            updateCamera() {
+                if (this.autoRotate) {
+                    this.controls.rotationY += 0.005;
+                }
+
+                const x = this.controls.distance * Math.sin(this.controls.rotationY) * Math.cos(this.controls.rotationX);
+                const y = this.controls.distance * Math.sin(this.controls.rotationX);
+                const z = this.controls.distance * Math.cos(this.controls.rotationY) * Math.cos(this.controls.rotationX);
+
+                this.camera.position.set(x, y + 20, z);
+                this.camera.lookAt(this.controls.target);
+            }
+
+            updateBots() {
+                const time = this.clock.getElapsedTime();
+                
+                this.bots.forEach(bot => {
+
+                    bot.position.x += Math.cos(bot.userData.direction) * bot.userData.speed;
+                    bot.position.z += Math.sin(bot.userData.direction) * bot.userData.speed;
+                    
+                    if (Math.abs(bot.position.x) > 40 || Math.abs(bot.position.z) > 40) {
+                        bot.userData.direction += Math.PI;
+                    }
+                    
+                    bot.rotation.y = bot.userData.direction;
+
+                    bot.position.y = Math.sin(time * 2 + bot.position.x) * 0.5;
+                    
+                    if (bot.children.length > 5) {
+                        bot.children[4].rotation.z = Math.sin(time * 3) * 0.3; // left arm
+                        bot.children[5].rotation.z = Math.sin(time * 3 + Math.PI) * 0.3; // right arm
+                    }
+                });
+            }
+
+            updateLogos() {
+                const time = this.clock.getElapsedTime();
+                
+                this.logos.forEach((logo, index) => {
+
+                    logo.position.y = logo.userData.originalY + Math.sin(time + index * 2) * 2;
+                    
+                    logo.rotation.y += 0.01;
+                    
+                    if (logo.children.length > 2) {
+                        const glow = logo.children[2];
+                        glow.material.opacity = 0.2 + Math.sin(time * 2 + index) * 0.1;
+                    }
+                });
+            }
+
+            updateDataStreams() {
+                const time = this.clock.getElapsedTime();
+                
+                this.dataStreams.forEach(stream => {
+                    const positions = stream.geometry.attributes.position.array;
+                    
+                    for (let i = 0; i < positions.length; i += 3) {
+                        positions[i + 1] += stream.userData.speed;
+                        
+                        if (positions[i + 1] > 50) {
+                            positions[i + 1] = 0;
+                        }
+                    }
+                    
+                    stream.geometry.attributes.position.needsUpdate = true;
+                    stream.material.opacity = 0.3 + Math.sin(time * 2) * 0.2;
+                });
+            }
+
+            updateParticles() {
+                const time = this.clock.getElapsedTime();
+                
+                this.particles.forEach(particleSystem => {
+                    const positions = particleSystem.geometry.attributes.position.array;
+                    
+                    for (let i = 0; i < positions.length; i += 3) {
+                        positions[i + 1] += 0.1;
+                        
+                        if (positions[i + 1] > 100) {
+                            positions[i + 1] = 0;
+                        }
+                    }
+                    
+                    particleSystem.geometry.attributes.position.needsUpdate = true;
+                    particleSystem.rotation.y += 0.001;
+                });
+            }
+
+            updateStats() {
+                const now = performance.now();
+                if (!this.lastTime) this.lastTime = now;
+                
+                this.stats.fps = Math.round(1000 / (now - this.lastTime));
+                this.stats.objects = this.bots.length + this.logos.length;
+                this.stats.particles = this.particles.length;
+                
+                document.getElementById('fps').textContent = this.stats.fps;
+                document.getElementById('objects').textContent = this.stats.objects;
+                document.getElementById('particles').textContent = this.stats.particles;
+                
+                this.lastTime = now;
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                
+                this.updateCamera();
+                this.updateBots();
+                this.updateLogos();
+                this.updateDataStreams();
+                this.updateParticles();
+                this.updateStats();
+                
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+
+        function enterBattlefield() {
+            if (window.battlefieldInstance) {
+                window.battlefieldInstance.enterBattlefield();
+            }
+        }
+        
+        window.addEventListener('load', () => {
+            window.battlefieldInstance = new FuturisticBattlefield();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Eco System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            overflow-x: auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Enhanced Futuristic Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(255, 0, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(0, 255, 127, 0.05) 0%, transparent 70%);
+            z-index: -3;
+        }
+
+        .geometric-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -2;
+            opacity: 0.1;
+        }
+
+        .hex-grid {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            background-image: 
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(30deg, rgba(255, 0, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(-30deg, rgba(255, 0, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px, 40px 40px, 60px 60px, 60px 60px;
+            animation: gridFlow 20s linear infinite;
+        }
+
+        @keyframes gridFlow {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-40px, -40px) rotate(360deg); }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.6;
+            animation: floatShape 15s ease-in-out infinite;
+        }
+
+        .shape.triangle {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid #00ffff;
+        }
+
+        .shape.diamond {
+            width: 15px;
+            height: 15px;
+            background: #ff00ff;
+            transform: rotate(45deg);
+        }
+
+        .shape.circle {
+            width: 12px;
+            height: 12px;
+            background: #00ff7f;
+            border-radius: 50%;
+        }
+
+        .shape.hexagon {
+            width: 20px;
+            height: 12px;
+            background: #ffff00;
+            position: relative;
+        }
+
+        .shape.hexagon::before,
+        .shape.hexagon::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+        }
+
+        .shape.hexagon::before {
+            bottom: 100%;
+            border-bottom: 6px solid #ffff00;
+        }
+
+        .shape.hexagon::after {
+            top: 100%;
+            border-top: 6px solid #ffff00;
+        }
+
+        @keyframes floatShape {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg); 
+                opacity: 0.3; 
+            }
+            25% { 
+                transform: translateY(-30px) rotate(90deg); 
+                opacity: 0.8; 
+            }
+            50% { 
+                transform: translateY(-15px) rotate(180deg); 
+                opacity: 0.6; 
+            }
+            75% { 
+                transform: translateY(-45px) rotate(270deg); 
+                opacity: 0.9; 
+            }
+        }
+
+        .data-streams {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .stream {
+            position: absolute;
+            width: 2px;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, #00ffff, transparent);
+            animation: streamFlow 4s linear infinite;
+        }
+
+        @keyframes streamFlow {
+            0% { transform: translateY(-100px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: #00ffff;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .github-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #00ffff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: rgba(0, 255, 255, 0.05);
+            font-weight: 500;
+        }
+
+        .github-link:hover {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .github-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px #00ffff,
+                0 0 20px #00ffff,
+                0 0 30px #00ffff;
+            animation: neonPulse 2s ease-in-out infinite alternate;
+            position: relative;
+            letter-spacing: 0.1em;
+        }
+
+        .header h1::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: #ff00ff;
+            z-index: -1;
+            animation: glitch 0.3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse {
+            0% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+            100% { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff; }
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-1px, 1px); }
+            40% { transform: translate(-1px, -1px); }
+            60% { transform: translate(1px, 1px); }
+            80% { transform: translate(1px, -1px); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #00ff7f;
+            font-weight: 400;
+            opacity: 0.9;
+            letter-spacing: 0.2em;
+            animation: dataStream 3s ease-in-out infinite;
+        }
+
+        @keyframes dataStream {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .flowchart {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .category-card {
+            background: linear-gradient(145deg, rgba(15, 15, 25, 0.9), rgba(25, 25, 35, 0.8));
+            border: 2px solid;
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .category-card:hover::before {
+            left: 100%;
+        }
+
+        .automation { 
+            border-image: linear-gradient(45deg, #ff6b6b, #ff8e53) 1;
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.2);
+        }
+        .text { 
+            border-image: linear-gradient(45deg, #4ecdc4, #44a08d) 1;
+            box-shadow: 0 0 30px rgba(78, 205, 196, 0.2);
+        }
+        .image { 
+            border-image: linear-gradient(45deg, #45b7d1, #96c93d) 1;
+            box-shadow: 0 0 30px rgba(69, 183, 209, 0.2);
+        }
+        .video { 
+            border-image: linear-gradient(45deg, #f093fb, #f5576c) 1;
+            box-shadow: 0 0 30px rgba(240, 147, 251, 0.2);
+        }
+        .voice { 
+            border-image: linear-gradient(45deg, #4facfe, #00f2fe) 1;
+            box-shadow: 0 0 30px rgba(79, 172, 254, 0.2);
+        }
+        .agentic { 
+            border-image: linear-gradient(45deg, #43e97b, #38f9d7) 1;
+            box-shadow: 0 0 30px rgba(67, 233, 123, 0.2);
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 50px rgba(0, 255, 255, 0.2);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-right: 20px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            animation: iconGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes iconGlow {
+            0% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
+            100% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.6); }
+        }
+
+        .category-title {
+            color: #ffffff;
+            font-size: 1.4rem;
+            font-weight: 600;
+            font-family: 'Space Mono', monospace;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            letter-spacing: 0.1em;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tool-item {
+            background: linear-gradient(145deg, rgba(10, 10, 20, 0.8), rgba(20, 20, 30, 0.6));
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .tool-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .tool-item:hover::before {
+            transform: translateX(100%);
+        }
+
+        .tool-item:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(145deg, rgba(15, 15, 25, 0.9), rgba(25, 25, 35, 0.8));
+            border-color: #00ffff;
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .tool-ranking {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .tool-name {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-family: 'Exo 2', sans-serif;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+        }
+
+        .tool-description {
+            color: #00ff7f;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .tool-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.75rem;
+            color: #ff00ff;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .stat-label {
+            opacity: 0.7;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #00ffff;
+        }
+
+        .stats-overlay {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(145deg, rgba(5, 5, 15, 0.9), rgba(15, 15, 25, 0.8));
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            color: #ffffff;
+            font-family: 'Space Mono', monospace;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .stats-overlay h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .stat-item-overlay {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            gap: 20px;
+        }
+
+        .stat-item-overlay .label {
+            color: #00ff7f;
+        }
+
+        .stat-item-overlay .value {
+            color: #ff00ff;
+            font-weight: 600;
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            animation: scanLine 4s linear infinite;
+        }
+
+        @keyframes scanLine {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100vh); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.5rem; }
+            .flowchart { grid-template-columns: 1fr; gap: 20px; }
+            .tools-grid { grid-template-columns: 1fr; }
+            .stats-overlay { 
+                position: relative; 
+                margin: 20px 0;
+                width: 100%;
+            }
+            .author-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="geometric-bg">
+        <div class="hex-grid"></div>
+    </div>
+    <div class="floating-shapes" id="floatingShapes"></div>
+    <div class="data-streams" id="dataStreams"></div>
+    <div class="scan-line"></div>
+    
+    <div class="container">
+        <div class="header">
+            <div class="author-info">
+                <span>Created by Lakshman Kambam</span>
+                <a href="https://github.com/klakshman318" class="github-link" target="_blank">
+                    <svg class="github-icon" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    GitHub Profile
+                </a>
+            </div>
+            <h1 data-text="AI ECO SYSTEM">AI ECO SYSTEM</h1>
+            <p class="subtitle">[ DISCOVER • COMPARE • DOMINATE ]</p>
+        </div>
+
+        <div class="stats-overlay">
+            <h3>SYSTEM STATUS</h3>
+            <div class="stat-item-overlay">
+                <span class="label">Categories:</span>
+                <span class="value">06</span>
+            </div>
+            <div class="stat-item-overlay">
+                <span class="label">AI Tools:</span>
+                <span class="value" id="tool-count">36</span>
+            </div>
+            <div class="stat-item-overlay">
+                <span class="label">Market Cap:</span>
+                <span class="value">$2.1T</span>
+            </div>
+            <div class="stat-item-overlay">
+                <span class="label">Users:</span>
+                <span class="value">800M+</span>
+            </div>
+            <div class="stat-item-overlay">
+                <span class="label">Version:</span>
+                <span class="value">2025.1</span>
+            </div>
+        </div>
+
+        <div class="flowchart">
+            <div class="category-card automation">
+                <div class="category-header">
+                    <div class="category-icon">🔧</div>
+                    <div class="category-title">NO-CODE AUTOMATION</div>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-ranking">#1</div>
+                        <div class="tool-name">n8n</div>
+                        <div class="tool-description">Open Source Leader</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">4.9/5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Stars</span>
+                                <span class="stat-value">117K+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">200K+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#2</div>
+                        <div class="tool-name">Make</div>
+                        <div class="tool-description">Visual Power User</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">4.8/5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Value</span>
+                                <span class="stat-value">4.7/5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Apps</span>
+                                <span class="stat-value">1400+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#3</div>
+                        <div class="tool-name">Zapier</div>
+                        <div class="tool-description">Market Leader</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">4.7/5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">3M+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Apps</span>
+                                <span class="stat-value">7000+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#4</div>
+                        <div class="tool-name">Pabbly Connect</div>
+                        <div class="tool-description">Budget Champion</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">4.6/5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Value</span>
+                                <span class="stat-value">4.6/5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Apps</span>
+                                <span class="stat-value">1000+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#5</div>
+                        <div class="tool-name">Microsoft Power Automate</div>
+                        <div class="tool-description">Enterprise Choice</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">4.3/5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">5M+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Apps</span>
+                                <span class="stat-value">1100+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#6</div>
+                        <div class="tool-name">IFTTT</div>
+                        <div class="tool-description">Simplicity Leader</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">4.7/5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">20M+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Apps</span>
+                                <span class="stat-value">900+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card text">
+                <div class="category-header">
+                    <div class="category-icon">🧠</div>
+                    <div class="category-title">LARGE LANGUAGE MODELS</div>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-ranking">#1</div>
+                        <div class="tool-name">OpenAI o4-mini</div>
+                        <div class="tool-description">Reasoning Champion</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Score</span>
+                                <span class="stat-value">70</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">AIME</span>
+                                <span class="stat-value">93.4%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">SWE</span>
+                                <span class="stat-value">68.1%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#2</div>
+                        <div class="tool-name">Gemini 2.5 Pro</div>
+                        <div class="tool-description">Versatile Leader</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Score</span>
+                                <span class="stat-value">68</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">GPQA</span>
+                                <span class="stat-value">84.0%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Context</span>
+                                <span class="stat-value">1M</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#3</div>
+                        <div class="tool-name">Claude 3.5 Sonnet</div>
+                        <div class="tool-description">Coding Specialist</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">HumanEval</span>
+                                <span class="stat-value">93.7%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">SWE</span>
+                                <span class="stat-value">70.3%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">GPQA</span>
+                                <span class="stat-value">83.8%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#4</div>
+                        <div class="tool-name">GPT-4o</div>
+                        <div class="tool-description">Balanced Performer</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">MMLU</span>
+                                <span class="stat-value">88.7%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">HumanEval</span>
+                                <span class="stat-value">90.2%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Arena</span>
+                                <span class="stat-value">65%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#5</div>
+                        <div class="tool-name">Llama 3.1 405B</div>
+                        <div class="tool-description">Open Source Leader</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">MMLU</span>
+                                <span class="stat-value">88.6%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">BFCL</span>
+                                <span class="stat-value">81.1%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Context</span>
+                                <span class="stat-value">128K</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#6</div>
+                        <div class="tool-name">Grok 3</div>
+                        <div class="tool-description">Reasoning Competitor</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">GPQA</span>
+                                <span class="stat-value">84.6%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">AIME</span>
+                                <span class="stat-value">93.3%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Real-time</span>
+                                <span class="stat-value">Yes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card image">
+                <div class="category-header">
+                    <div class="category-icon">🎨</div>
+                    <div class="category-title">IMAGE GENERATION</div>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-ranking">#1</div>
+                        <div class="tool-name">FLUX1.1 Pro</div>
+                        <div class="tool-description">Technical Leader</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">ELO</span>
+                                <span class="stat-value">1,143</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Win</span>
+                                <span class="stat-value">68%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Speed</span>
+                                <span class="stat-value">6x</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#2</div>
+                        <div class="tool-name">Ideogram v2</div>
+                        <div class="tool-description">Text Rendering Master</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">ELO</span>
+                                <span class="stat-value">1,102</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Text</span>
+                                <span class="stat-value">95%+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">8M</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#3</div>
+                        <div class="tool-name">Midjourney v6.1</div>
+                        <div class="tool-description">Photorealism King</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">ELO</span>
+                                <span class="stat-value">1,093</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Win</span>
+                                <span class="stat-value">64%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">4.4/5</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#4</div>
+                        <div class="tool-name">DALL-E 3</div>
+                        <div class="tool-description">Accessibility Leader</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Ease</span>
+                                <span class="stat-value">4.5/5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">100M+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Res</span>
+                                <span class="stat-value">1024²</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#5</div>
+                        <div class="tool-name">Leonardo AI</div>
+                        <div class="tool-description">Feature Complete</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">UX</span>
+                                <span class="stat-value">4.1/5</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">8M+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Tools</span>
+                                <span class="stat-value">15+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#6</div>
+                        <div class="tool-name">Stable Diffusion</div>
+                        <div class="tool-description">Customization King</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">FID</span>
+                                <span class="stat-value">28.83</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Devs</span>
+                                <span class="stat-value">90%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Models</span>
+                                <span class="stat-value">1000+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card video">
+                <div class="category-header">
+                    <div class="category-icon">🎬</div>
+                    <div class="category-title">VIDEO CREATION</div>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-ranking">#1</div>
+                        <div class="tool-name">KLING AI</div>
+                        <div class="tool-description">Overall Champion</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">9.2/10</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Length</span>
+                                <span class="stat-value">2min</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Satisfaction</span>
+                                <span class="stat-value">94%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#2</div>
+                        <div class="tool-name">Google Veo 3</div>
+                        <div class="tool-description">Quality Leader</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">9.0/10</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Prompt</span>
+                                <span class="stat-value">96%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Audio</span>
+                                <span class="stat-value">Native</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#3</div>
+                        <div class="tool-name">Sora</div>
+                        <div class="tool-description">Creative Excellence</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">9.0/10</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Quality</span>
+                                <span class="stat-value">9.5/10</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Satisfaction</span>
+                                <span class="stat-value">92%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#4</div>
+                        <div class="tool-name">Runway Gen-3</div>
+                        <div class="tool-description">Professional Choice</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">8.7/10</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Speed</span>
+                                <span class="stat-value">2x</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">5M</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#5</div>
+                        <div class="tool-name">Luma Dream Machine</div>
+                        <div class="tool-description">Developer Friendly</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">8.1/10</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Speed</span>
+                                <span class="stat-value">120fps</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">API</span>
+                                <span class="stat-value">Yes</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#6</div>
+                        <div class="tool-name">Pika Labs</div>
+                        <div class="tool-description">Brand Adoption</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Rating</span>
+                                <span class="stat-value">7.9/10</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Brands</span>
+                                <span class="stat-value">Fenty</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">3M</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card voice">
+                <div class="category-header">
+                    <div class="category-icon">🎤</div>
+                    <div class="category-title">VOICE & AUDIO</div>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-ranking">#1</div>
+                        <div class="tool-name">ElevenLabs</div>
+                        <div class="tool-description">Technical Excellence</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">WER</span>
+                                <span class="stat-value">3.3%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Context</span>
+                                <span class="stat-value">63.37%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Latency</span>
+                                <span class="stat-value">150ms</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#2</div>
+                        <div class="tool-name">OpenAI Whisper</div>
+                        <div class="tool-description">Batch Processing</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">WER</span>
+                                <span class="stat-value">7.6%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Langs</span>
+                                <span class="stat-value">99+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Rank</span>
+                                <span class="stat-value">#1 ASR</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#3</div>
+                        <div class="tool-name">Azure Speech</div>
+                        <div class="tool-description">Enterprise Value</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Accuracy</span>
+                                <span class="stat-value">77.31%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Cost</span>
+                                <span class="stat-value">$0.013</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Langs</span>
+                                <span class="stat-value">75+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#4</div>
+                        <div class="tool-name">Speechify</div>
+                        <div class="tool-description">Consumer Champion</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">50M+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Reviews</span>
+                                <span class="stat-value">500K+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Speed</span>
+                                <span class="stat-value">4.5x</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#5</div>
+                        <div class="tool-name">Murf AI</div>
+                        <div class="tool-description">Naturalness Leader</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Quality</span>
+                                <span class="stat-value">Human-like</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Langs</span>
+                                <span class="stat-value">20+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Voices</span>
+                                <span class="stat-value">120+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#6</div>
+                        <div class="tool-name">Descript</div>
+                        <div class="tool-description">Workflow Integration</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Features</span>
+                                <span class="stat-value">All-in-1</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">2M</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Editing</span>
+                                <span class="stat-value">Text-based</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-card agentic">
+                <div class="category-header">
+                    <div class="category-icon">🤖</div>
+                    <div class="category-title">AGENTIC AI TOOLS</div>
+                </div>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-ranking">#1</div>
+                        <div class="tool-name">LangChain</div>
+                        <div class="tool-description">Framework Leader</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">GitHub</span>
+                                <span class="stat-value">111K⭐</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Enterprise</span>
+                                <span class="stat-value">LinkedIn</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Models</span>
+                                <span class="stat-value">80+</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#2</div>
+                        <div class="tool-name">Microsoft Copilot</div>
+                        <div class="tool-description">Developer Champion</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Devs</span>
+                                <span class="stat-value">15M</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Fortune100</span>
+                                <span class="stat-value">40%</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Usage</span>
+                                <span class="stat-value">97%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#3</div>
+                        <div class="tool-name">IBM watsonx</div>
+                        <div class="tool-description">Enterprise Leader</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Agents</span>
+                                <span class="stat-value">150+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Apps</span>
+                                <span class="stat-value">80+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Auto</span>
+                                <span class="stat-value">94%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#4</div>
+                        <div class="tool-name">Anthropic Computer Use</div>
+                        <div class="tool-description">Innovation Pioneer</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Users</span>
+                                <span class="stat-value">18.9M</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Revenue</span>
+                                <span class="stat-value">$2.2B</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Control</span>
+                                <span class="stat-value">Full</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#5</div>
+                        <div class="tool-name">CrewAI</div>
+                        <div class="tool-description">Performance Optimizer</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Speed</span>
+                                <span class="stat-value">5.76x</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Devs</span>
+                                <span class="stat-value">100K+</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Agents</span>
+                                <span class="stat-value">Multi</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-ranking">#6</div>
+                        <div class="tool-name">AutoGPT</div>
+                        <div class="tool-description">Community Favorite</div>
+                        <div class="tool-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">GitHub</span>
+                                <span class="stat-value">176K⭐</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Forks</span>
+                                <span class="stat-value">45,866</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Pioneer</span>
+                                <span class="stat-value">Yes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function createFloatingShapes() {
+            const shapesContainer = document.getElementById('floatingShapes');
+            const shapeTypes = ['triangle', 'diamond', 'circle', 'hexagon'];
+            
+            for (let i = 0; i < 20; i++) {
+                const shape = document.createElement('div');
+                const shapeType = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+                shape.className = `shape ${shapeType}`;
+                shape.style.left = Math.random() * 100 + '%';
+                shape.style.top = Math.random() * 100 + '%';
+                shape.style.animationDelay = Math.random() * 15 + 's';
+                shape.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                shapesContainer.appendChild(shape);
+            }
+        }
+
+        function createDataStreams() {
+            const streamsContainer = document.getElementById('dataStreams');
+            
+            for (let i = 0; i < 15; i++) {
+                const stream = document.createElement('div');
+                stream.className = 'stream';
+                stream.style.left = Math.random() * 100 + '%';
+                stream.style.animationDelay = Math.random() * 4 + 's';
+                stream.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                streamsContainer.appendChild(stream);
+            }
+        }
+
+        function addInteractivity() {
+            const cards = document.querySelectorAll('.category-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.zIndex = '10';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.zIndex = '1';
+                });
+            });
+
+            const toolItems = document.querySelectorAll('.tool-item');
+            toolItems.forEach((item, index) => {
+                item.addEventListener('click', () => {
+
+                    item.style.transform = 'scale(0.95)';
+                    item.style.filter = 'brightness(1.2)';
+                    
+                    setTimeout(() => {
+                        item.style.transform = '';
+                        item.style.filter = '';
+                    }, 150);
+                    
+                    const pulse = document.createElement('div');
+                    pulse.style.position = 'absolute';
+                    pulse.style.border = '2px solid #00ffff';
+                    pulse.style.borderRadius = '50%';
+                    pulse.style.width = '20px';
+                    pulse.style.height = '20px';
+                    pulse.style.left = '50%';
+                    pulse.style.top = '50%';
+                    pulse.style.transform = 'translate(-50%, -50%)';
+                    pulse.style.pointerEvents = 'none';
+                    pulse.style.animation = 'pulse 0.6s ease-out';
+                    
+                    item.style.position = 'relative';
+                    item.appendChild(pulse);
+                    
+                    setTimeout(() => pulse.remove(), 600);
+                });
+            });
+        }
+
+        const pulseStyle = document.createElement('style');
+        pulseStyle.textContent = `
+            @keyframes pulse {
+                to {
+                    width: 100px;
+                    height: 100px;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(pulseStyle);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            createFloatingShapes();
+            createDataStreams();
+            addInteractivity();
+            const title = document.querySelector('.header h1');
+            title.setAttribute('data-text', title.textContent);
+        });
+
+        const toolCount = document.querySelectorAll('.tool-item').length;
+        document.getElementById('tool-count').textContent = toolCount;
+
+        setInterval(() => {
+            const stats = document.querySelectorAll('.stat-value');
+            stats.forEach(stat => {
+                if (Math.random() > 0.95) {
+                    stat.style.color = '#ff00ff';
+                    stat.style.textShadow = '0 0 10px #ff00ff';
+                    setTimeout(() => {
+                        stat.style.color = '#00ffff';
+                        stat.style.textShadow = '';
+                    }, 200);
+                }
+            });
+        }, 1500);
+
+        setInterval(() => {
+            createDataStreams();
+        }, 5000);
+    </script>
+</body>
+</html>

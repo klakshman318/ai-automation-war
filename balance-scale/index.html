@@ -57,7 +57,6 @@
             50% { transform: translateX(-50%) translateY(-8px); }
         }
 
-        /* Balance Scale Structure */
         .scale-base {
             position: absolute;
             bottom: 200px;
@@ -110,7 +109,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
 
-        /* Scale Plates */
         .scale-plate {
             position: absolute;
             width: 200px;
@@ -139,7 +137,6 @@
             50% { transform: translateY(-15px); }
         }
 
-        /* Human Side */
         .human-silhouette {
             position: absolute;
             top: -80px;
@@ -169,7 +166,6 @@
             50% { transform: translateX(-50%) scale(1.05); }
         }
 
-        /* AI Code Side */
         .ai-code-block {
             position: absolute;
             top: -80px;
@@ -213,7 +209,6 @@
             100% { opacity: 1; width: 100%; }
         }
 
-        /* Currency Symbols */
         .currency-symbol {
             position: absolute;
             font-size: 40px;
@@ -238,7 +233,6 @@
         .currency-5 { top: 50%; left: 10%; animation-delay: 4s; }
         .currency-6 { top: 60%; right: 10%; animation-delay: 5s; }
 
-        /* Partnership Icons */
         .partnership-icon {
             position: absolute;
             width: 60px;
@@ -276,7 +270,6 @@
         .partnership-5 { top: 40%; left: 5%; animation-delay: 2s; }
         .partnership-6 { top: 70%; right: 5%; animation-delay: 2.5s; }
 
-        /* Impact Metrics */
         .impact-metric {
             position: absolute;
             background: rgba(0, 0, 0, 0.8);
@@ -324,7 +317,6 @@
             opacity: 0.9;
         }
 
-        /* Trend Arrows */
         .trend-arrow {
             position: absolute;
             font-size: 60px;
@@ -359,7 +351,6 @@
             50% { opacity: 1; transform: scale(1.1) rotate(45deg); }
         }
 
-        /* Balance Equation */
         .balance-equation {
             position: absolute;
             bottom: 50px;
@@ -393,7 +384,6 @@
             50% { opacity: 1; }
         }
 
-        /* Floating particles for atmosphere */
         .floating-particle {
             position: absolute;
             width: 4px;
@@ -423,23 +413,19 @@
 </head>
 <body>
     <div class="balance-container" onclick="openGitHub()">
-        <!-- Title -->
         <div class="title-overlay">
             <div class="main-title">THE BROADER IMPACT</div>
             <div class="subtitle">Balancing Human Creativity & AI Automation</div>
         </div>
 
-        <!-- Balance Scale Structure -->
         <div class="scale-base"></div>
         <div class="scale-fulcrum"></div>
         <div class="scale-arm"></div>
 
-        <!-- Human Side -->
         <div class="scale-plate human-plate">
             <div class="human-silhouette"></div>
         </div>
 
-        <!-- AI Side -->
         <div class="scale-plate ai-plate">
             <div class="ai-code-block">
                 <div class="code-line">if (automation) {</div>
@@ -452,7 +438,6 @@
             </div>
         </div>
 
-        <!-- Currency Symbols -->
         <div class="currency-symbol currency-1">💰</div>
         <div class="currency-symbol currency-2">💲</div>
         <div class="currency-symbol currency-3">💴</div>
@@ -460,7 +445,6 @@
         <div class="currency-symbol currency-5">💶</div>
         <div class="currency-symbol currency-6">💷</div>
 
-        <!-- Partnership Icons -->
         <div class="partnership-icon partnership-1">🤝</div>
         <div class="partnership-icon partnership-2">🔗</div>
         <div class="partnership-icon partnership-3">⚖️</div>
@@ -468,7 +452,6 @@
         <div class="partnership-icon partnership-5">📊</div>
         <div class="partnership-icon partnership-6">🎯</div>
 
-        <!-- Impact Metrics -->
         <div class="impact-metric metric-1">
             <div class="metric-value">$1.3B</div>
             <div class="metric-label">Platform Defense<br>Investment</div>
@@ -484,16 +467,13 @@
             <div class="metric-label">Authenticity<br>Verification</div>
         </div>
 
-        <!-- Trend Arrows -->
         <div class="trend-arrow trend-up">↗️</div>
         <div class="trend-arrow trend-down">↘️</div>
 
-        <!-- Balance Equation -->
         <div class="balance-equation">
             HUMAN CREATIVITY ⚖️ AI EFFICIENCY = FUTURE BALANCE
         </div>
 
-        <!-- Floating Particles -->
         <div class="floating-particle" style="left: 10%; animation-delay: 0s;"></div>
         <div class="floating-particle" style="left: 20%; animation-delay: 1s;"></div>
         <div class="floating-particle" style="left: 30%; animation-delay: 2s;"></div>
@@ -504,33 +484,27 @@
         <div class="floating-particle" style="left: 80%; animation-delay: 7s;"></div>
         <div class="floating-particle" style="left: 90%; animation-delay: 8s;"></div>
 
-        <!-- Click Hint -->
         <div class="click-hint">Click to view the project repository →</div>
     </div>
 
     <script>
         function openGitHub() {
-            // Replace with your actual GitHub repo URL
             window.open('https://github.com/klakshman318/ai-automation-war', '_blank');
         }
 
-        // Dynamic balance scale tilting
         function adjustScaleBalance() {
             const scaleArm = document.querySelector('.scale-arm');
             const humanPlate = document.querySelector('.human-plate');
             const aiPlate = document.querySelector('.ai-plate');
-            
-            // Random tilt between -5 and 5 degrees
+
             const tilt = (Math.random() - 0.5) * 10;
             
             scaleArm.style.transform = `translateX(-50%) rotate(${tilt}deg)`;
-            
-            // Adjust plate heights based on tilt
+            t
             humanPlate.style.transform = `translateY(${tilt * 2}px)`;
             aiPlate.style.transform = `translateY(${-tilt * 2}px)`;
         }
 
-        // Update metrics dynamically
         function updateMetrics() {
             const metrics = [
                 { selector: '.metric-1 .metric-value', base: 1.3, variance: 0.2, suffix: 'B' },
@@ -546,7 +520,6 @@
             });
         }
 
-        // Dynamic code updates
         function updateAICode() {
             const codeLines = [
                 'revenue += 1.3B;',
@@ -572,7 +545,6 @@
             }
         }
 
-        // Currency symbols value updates
         function rotateCurrencySymbols() {
             const symbols = ['💰', '💲', '💴', '💵', '💶', '💷', '🪙', '💸'];
             const currencyElements = document.querySelectorAll('.currency-symbol');
@@ -585,7 +557,6 @@
             });
         }
 
-        // Add floating particles periodically
         function createFloatingParticle() {
             const container = document.querySelector('.balance-container');
             const particle = document.createElement('div');
@@ -599,14 +570,12 @@
             }, 8000);
         }
 
-        // Start dynamic updates
         setInterval(adjustScaleBalance, 4000);
         setInterval(updateMetrics, 6000);
         setInterval(updateAICode, 5000);
         setInterval(rotateCurrencySymbols, 3000);
         setInterval(createFloatingParticle, 1000);
 
-        // Initial balance
         setTimeout(adjustScaleBalance, 1000);
     </script>
 </body>

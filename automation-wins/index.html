@@ -56,7 +56,6 @@
             50% { transform: translateX(-50%) translateY(-10px); }
         }
 
-        /* Flight Hunt Code Panel */
         .flight-hunt-panel {
             position: absolute;
             top: 15%;
@@ -109,7 +108,6 @@
             100% { opacity: 1; transform: translateX(0); }
         }
 
-        /* Podcast Waveform */
         .podcast-waveform {
             position: absolute;
             top: 25%;
@@ -161,7 +159,6 @@
             50% { height: 100%; }
         }
 
-        /* Calendar Grid */
         .calendar-widget {
             position: absolute;
             bottom: 20%;
@@ -224,7 +221,6 @@
             50% { transform: scale(1.1); }
         }
 
-        /* Social Media Posts */
         .social-posts {
             position: absolute;
             top: 45%;
@@ -292,7 +288,6 @@
             margin-right: 6px;
         }
 
-        /* AI Chatbot Avatars */
         .chatbot-cluster {
             position: absolute;
             top: 60%;
@@ -356,7 +351,6 @@
             50% { transform: translateY(-10px) scale(1.1); }
         }
 
-        /* Video Player */
         .video-player {
             position: absolute;
             bottom: 15%;
@@ -454,7 +448,6 @@
             100% { width: 60%; }
         }
 
-        /* Floating AI Icons */
         .floating-ai-icon {
             position: absolute;
             font-size: 30px;
@@ -488,7 +481,6 @@
             100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
         }
 
-        /* Click Hint */
         .click-hint {
             position: absolute;
             bottom: 30px;
@@ -506,7 +498,6 @@
             50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
         }
 
-        /* Success Stats */
         .stats-badge {
             position: absolute;
             top: 35%;
@@ -529,13 +520,11 @@
 </head>
 <body>
     <div class="collage-container" onclick="openGitHub()">
-        <!-- Title -->
         <div class="title-overlay">
             <div class="main-title">AI AUTOMATION WINS</div>
             <div class="subtitle">Billions in Saved Human Hours</div>
         </div>
 
-        <!-- Flight Hunt Code Panel -->
         <div class="flight-hunt-panel">
             <div class="flight-title">🛫 Flight Hunt Algorithm</div>
             <div class="code-line">// Monitor 847 airline sites</div>
@@ -547,12 +536,10 @@
             <div class="code-line">}</div>
         </div>
 
-        <!-- Success Stats Badge -->
         <div class="stats-badge">
             ✓ 47,000 searches/min
         </div>
 
-        <!-- Podcast Waveform -->
         <div class="podcast-waveform">
             <div class="waveform-title">🎙️ Podcast Generation</div>
             <div class="waveform-bars">
@@ -579,7 +566,6 @@
             </div>
         </div>
 
-        <!-- Calendar Widget -->
         <div class="calendar-widget">
             <div class="calendar-header">📅 AI Scheduling</div>
             <div class="calendar-grid">
@@ -607,7 +593,6 @@
             </div>
         </div>
 
-        <!-- Social Media Posts -->
         <div class="social-posts">
             <div class="social-post">
                 <div class="post-content">
@@ -629,7 +614,6 @@
             </div>
         </div>
 
-        <!-- AI Chatbot Avatars -->
         <div class="chatbot-cluster">
             <div class="chatbot-avatar">🤖</div>
             <div class="chatbot-avatar">🧠</div>
@@ -637,7 +621,6 @@
             <div class="chatbot-avatar">⚡</div>
         </div>
 
-        <!-- Video Player with AI Icons -->
         <div class="video-player">
             <div class="video-screen">
                 <div class="play-button">▶️</div>
@@ -652,22 +635,18 @@
             </div>
         </div>
 
-        <!-- Floating AI Icons -->
         <div class="floating-ai-icon">🧠</div>
         <div class="floating-ai-icon">⚡</div>
         <div class="floating-ai-icon">🔄</div>
 
-        <!-- Click Hint -->
         <div class="click-hint">Click anywhere to explore the full project →</div>
     </div>
 
     <script>
         function openGitHub() {
-            // Replace with your actual GitHub repo URL
             window.open('https://github.com/klakshman318/ai-automation-war', '_blank');
         }
 
-        // Dynamic code generation
         function updateFlightCode() {
             const codeLines = [
                 '// Found deal: $299 → $199',
@@ -695,7 +674,6 @@
             }, 4000);
         }
 
-        // Dynamic waveform
         function animateWaveform() {
             const bars = document.querySelectorAll('.wave-bar');
             
@@ -707,7 +685,6 @@
             }, 200);
         }
 
-        // Add floating icons periodically
         function createFloatingIcon() {
             const icons = ['🚀', '💡', '⚡', '🎯', '🔥', '✨', '🎪', '🎭'];
             const container = document.querySelector('.collage-container');
@@ -726,7 +703,6 @@
             }, 8000);
         }
 
-        // Update stats periodically
         function updateStats() {
             const badge = document.querySelector('.stats-badge');
             const stats = [
@@ -744,10 +720,9 @@
             }, 3000);
         }
 
-        // Add pulsing effect to calendar days with meetings
         function highlightBusyDays() {
             const days = document.querySelectorAll('.calendar-day');
-            const busyDays = [3, 7, 12, 18, 21]; // Random busy days
+            const busyDays = [3, 7, 12, 18, 21];
             
             busyDays.forEach(dayIndex => {
                 if (days[dayIndex]) {
@@ -757,7 +732,6 @@
             });
         }
 
-        // Initialize dynamic effects
         setTimeout(updateFlightCode, 1000);
         setTimeout(animateWaveform, 500);
         setTimeout(updateStats, 2000);
@@ -765,7 +739,6 @@
         
         setInterval(createFloatingIcon, 2000);
 
-        // Video play button interaction
         document.querySelector('.play-button').addEventListener('click', function(e) {
             e.stopPropagation();
             this.textContent = '⏸️';
