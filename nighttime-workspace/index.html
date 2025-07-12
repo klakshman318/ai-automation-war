@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Workspace - The Night Shift</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #0f0f23 100%);
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+            height: 100vh;
+            cursor: pointer;
+        }
+
+        .workspace {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .code-screen {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 400px;
+            height: 300px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            font-size: 12px;
+            color: #00ff00;
+            overflow: hidden;
+            animation: screenGlow 2s infinite alternate;
+        }
+
+        @keyframes screenGlow {
+            0% { box-shadow: 0 0 20px #00ff00; }
+            100% { box-shadow: 0 0 40px #00ff00, 0 0 60px #00ff00; }
+        }
+
+        .code-line {
+            margin: 5px 0;
+            opacity: 0;
+            animation: typeWriter 0.5s ease-out forwards;
+        }
+
+        .code-line:nth-child(1) { animation-delay: 0.2s; }
+        .code-line:nth-child(2) { animation-delay: 0.4s; }
+        .code-line:nth-child(3) { animation-delay: 0.6s; }
+        .code-line:nth-child(4) { animation-delay: 0.8s; }
+        .code-line:nth-child(5) { animation-delay: 1.0s; }
+        .code-line:nth-child(6) { animation-delay: 1.2s; }
+        .code-line:nth-child(7) { animation-delay: 1.4s; }
+        .code-line:nth-child(8) { animation-delay: 1.6s; }
+
+        @keyframes typeWriter {
+            0% { opacity: 0; transform: translateX(-20px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .ai-agent {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 250px;
+            z-index: 10;
+        }
+
+        .agent-silhouette {
+            width: 100px;
+            height: 120px;
+            background: linear-gradient(45deg, #333, #666);
+            border-radius: 50px 50px 20px 20px;
+            position: relative;
+            margin: 0 auto;
+            animation: agentPulse 2s infinite alternate;
+        }
+
+        .agent-silhouette::before {
+            content: '🤖';
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+        }
+
+        @keyframes agentPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        .juggling-items {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 200px;
+        }
+
+        .juggling-item {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            font-weight: bold;
+            animation: juggle 3s infinite ease-in-out;
+        }
+
+        .airline-icon {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            left: 50px;
+            animation-delay: 0s;
+        }
+
+        .book-node {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            left: 150px;
+            animation-delay: 0.5s;
+        }
+
+        .calendar-widget {
+            background: linear-gradient(45deg, #45b7d1, #96c93d);
+            left: 250px;
+            animation-delay: 1s;
+        }
+
+        .video-panel {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            left: 100px;
+            animation-delay: 1.5s;
+        }
+
+        .data-node {
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            left: 200px;
+            animation-delay: 2s;
+        }
+
+        @keyframes juggle {
+            0% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-80px) rotate(90deg); }
+            50% { transform: translateY(-120px) rotate(180deg); }
+            75% { transform: translateY(-80px) rotate(270deg); }
+            100% { transform: translateY(0px) rotate(360deg); }
+        }
+
+        .storyboard-panel {
+            position: absolute;
+            top: 15%;
+            right: 5%;
+            width: 350px;
+            height: 250px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff00ff;
+            border-radius: 15px;
+            padding: 20px;
+            animation: panelGlow 2.5s infinite alternate;
+        }
+
+        @keyframes panelGlow {
+            0% { box-shadow: 0 0 20px #ff00ff; }
+            100% { box-shadow: 0 0 40px #ff00ff, 0 0 60px #ff00ff; }
+        }
+
+        .storyboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            height: 100%;
+        }
+
+        .story-frame {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            animation: frameFlicker 2s infinite;
+        }
+
+        .story-frame:nth-child(odd) { animation-delay: 0.3s; }
+        .story-frame:nth-child(even) { animation-delay: 0.6s; }
+
+        @keyframes frameFlicker {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .calendar-display {
+            position: absolute;
+            bottom: 10%;
+            left: 10%;
+            width: 300px;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 15px;
+            animation: calendarGlow 3s infinite alternate;
+        }
+
+        @keyframes calendarGlow {
+            0% { box-shadow: 0 0 20px #00ffff; }
+            100% { box-shadow: 0 0 40px #00ffff, 0 0 60px #00ffff; }
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .calendar-day {
+            width: 30px;
+            height: 25px;
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+            animation: dayPulse 2s infinite;
+        }
+
+        .calendar-day:nth-child(3n) {
+            background: linear-gradient(45deg, #fd79a8, #e84393);
+            animation-delay: 0.2s;
+        }
+
+        .calendar-day:nth-child(5n) {
+            background: linear-gradient(45deg, #55efc4, #00b894);
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dayPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .node-network {
+            position: absolute;
+            top: 60%;
+            right: 10%;
+            width: 250px;
+            height: 200px;
+        }
+
+        .network-node {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            animation: nodeFloat 3s infinite ease-in-out;
+        }
+
+        .network-node:nth-child(1) { top: 20%; left: 30%; animation-delay: 0s; }
+        .network-node:nth-child(2) { top: 40%; left: 70%; animation-delay: 0.5s; }
+        .network-node:nth-child(3) { top: 70%; left: 20%; animation-delay: 1s; }
+        .network-node:nth-child(4) { top: 60%; left: 80%; animation-delay: 1.5s; }
+        .network-node:nth-child(5) { top: 10%; left: 60%; animation-delay: 2s; }
+
+        @keyframes nodeFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff00, transparent);
+            animation: connectionPulse 2s infinite;
+        }
+
+        @keyframes connectionPulse {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .title-overlay {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 100;
+            color: white;
+            pointer-events: none;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 0 0 20px #00ffff;
+            margin-bottom: 0.5rem;
+            animation: titleGlow 2s infinite alternate;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            text-shadow: 0 0 10px #ffffff;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px #00ffff; }
+            100% { text-shadow: 0 0 40px #00ffff, 0 0 60px #00ffff; }
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            color: #00ffff;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            animation: clickPulse 2s infinite;
+        }
+
+        @keyframes clickPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .floating-icons {
+            position: absolute;
+            font-size: 30px;
+            color: #fff;
+            animation: floatAround 4s infinite ease-in-out;
+        }
+
+        .floating-icons:nth-child(1) { top: 20%; left: 80%; animation-delay: 0s; }
+        .floating-icons:nth-child(2) { top: 80%; left: 20%; animation-delay: 1s; }
+        .floating-icons:nth-child(3) { top: 30%; left: 5%; animation-delay: 2s; }
+
+        @keyframes floatAround {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="workspace" onclick="openGitHub()">
+        <!-- Title -->
+        <div class="title-overlay">
+            <div class="main-title">AI NIGHT SHIFT</div>
+            <div class="subtitle">Automated Workspace</div>
+        </div>
+
+        <!-- Code Screen -->
+        <div class="code-screen">
+            <div class="code-line">// AI Agent Task Scheduler</div>
+            <div class="code-line">function processFlightDeals() {</div>
+            <div class="code-line">  scanAirlines(847);</div>
+            <div class="code-line">  comparePrice();</div>
+            <div class="code-line">}</div>
+            <div class="code-line">function digestResearch() {</div>
+            <div class="code-line">  summarize(papers);</div>
+            <div class="code-line">}</div>
+        </div>
+
+        <!-- AI Agent with Juggling Items -->
+        <div class="ai-agent">
+            <div class="juggling-items">
+                <div class="juggling-item airline-icon">✈️</div>
+                <div class="juggling-item book-node">📚</div>
+                <div class="juggling-item calendar-widget">📅</div>
+                <div class="juggling-item video-panel">🎬</div>
+                <div class="juggling-item data-node">📊</div>
+            </div>
+            <div class="agent-silhouette"></div>
+        </div>
+
+        <!-- Storyboard Panel -->
+        <div class="storyboard-panel">
+            <div class="storyboard-grid">
+                <div class="story-frame">🎭</div>
+                <div class="story-frame">🎬</div>
+                <div class="story-frame">🎥</div>
+                <div class="story-frame">🎪</div>
+                <div class="story-frame">🎨</div>
+                <div class="story-frame">🎯</div>
+            </div>
+        </div>
+
+        <!-- Calendar Display -->
+        <div class="calendar-display">
+            <div style="color: #00ffff; font-size: 14px; margin-bottom: 10px;">📅 Task Schedule</div>
+            <div class="calendar-grid">
+                <div class="calendar-day">1</div>
+                <div class="calendar-day">2</div>
+                <div class="calendar-day">3</div>
+                <div class="calendar-day">4</div>
+                <div class="calendar-day">5</div>
+                <div class="calendar-day">6</div>
+                <div class="calendar-day">7</div>
+                <div class="calendar-day">8</div>
+                <div class="calendar-day">9</div>
+                <div class="calendar-day">10</div>
+                <div class="calendar-day">11</div>
+                <div class="calendar-day">12</div>
+                <div class="calendar-day">13</div>
+                <div class="calendar-day">14</div>
+            </div>
+        </div>
+
+        <!-- Node Network -->
+        <div class="node-network">
+            <div class="network-node"></div>
+            <div class="network-node"></div>
+            <div class="network-node"></div>
+            <div class="network-node"></div>
+            <div class="network-node"></div>
+            <div class="connection-line" style="top: 25%; left: 35%; width: 100px; transform: rotate(45deg);"></div>
+            <div class="connection-line" style="top: 45%; left: 25%; width: 120px; transform: rotate(-30deg);"></div>
+            <div class="connection-line" style="top: 65%; left: 45%; width: 80px; transform: rotate(60deg);"></div>
+        </div>
+
+        <!-- Floating Icons -->
+        <div class="floating-icons">⚡</div>
+        <div class="floating-icons">💡</div>
+        <div class="floating-icons">🔄</div>
+
+        <!-- Click Hint -->
+        <div class="click-hint">Click to view project repository →</div>
+    </div>
+
+    <script>
+        function openGitHub() {
+            // Replace with your actual GitHub repo URL
+            window.open('https://github.com/yourusername/ai-automation-war', '_blank');
+        }
+
+        // Add dynamic typing effect to code
+        function addNewCodeLine() {
+            const codeScreen = document.querySelector('.code-screen');
+            const newLines = [
+                'updateCalendar();',
+                'processVideos();',
+                'analyzeTrends();',
+                'generateReports();',
+                'optimizeWorkflow();'
+            ];
+            
+            const randomLine = newLines[Math.floor(Math.random() * newLines.length)];
+            const newLineElement = document.createElement('div');
+            newLineElement.className = 'code-line';
+            newLineElement.textContent = randomLine;
+            newLineElement.style.opacity = '0';
+            newLineElement.style.animation = 'typeWriter 0.5s ease-out forwards';
+            
+            codeScreen.appendChild(newLineElement);
+            
+            // Remove old lines to prevent overflow
+            const allLines = codeScreen.querySelectorAll('.code-line');
+            if (allLines.length > 12) {
+                allLines[0].remove();
+            }
+        }
+
+        setInterval(addNewCodeLine, 3000);
+
+        // Add dynamic network connections
+        function createConnection() {
+            const network = document.querySelector('.node-network');
+            const connection = document.createElement('div');
+            connection.className = 'connection-line';
+            connection.style.top = Math.random() * 80 + '%';
+            connection.style.left = Math.random() * 60 + '%';
+            connection.style.width = Math.random() * 100 + 50 + 'px';
+            connection.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+            network.appendChild(connection);
+            
+            setTimeout(() => {
+                connection.remove();
+            }, 2000);
+        }
+
+        setInterval(createConnection, 1500);
+    </script>
+</body>
+</html>
