@@ -1,6 +1,6 @@
 # AI Automation War - Interactive Visualizations
 
-## 🎯 Article: The Great AI Automation War
+## The Great AI Automation War: How Silicon Valley Is Fighting Back Against the Machines
 [Read the full article with interactive visualizations](./ARTICLE.md)
 
 ## 🚀 Live Demos
@@ -11,5 +11,3 @@
 - [Battlegrounds Network](https://ai-automation-war.vercel.app/battlegrounds-network)
 - [Balance Scale](https://ai-automation-war.vercel.app/balance-scale)
 - [Path Forward](https://ai-automation-war.vercel.app/path-forward)
-
-- 
