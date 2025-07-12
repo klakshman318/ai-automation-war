@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Generation Pipeline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Courier New', monospace;
+            height: 100vh;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .workflow-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title-header {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: white;
+            z-index: 100;
+        }
+
+        .main-title {
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255,255,255,0.8);
+            margin-bottom: 0.3rem;
+            animation: titlePulse 2s infinite alternate;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        @keyframes titlePulse {
+            0% { transform: translateX(-50%) scale(1); }
+            100% { transform: translateX(-50%) scale(1.02); }
+        }
+
+        .workflow-path {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            margin-top: 100px;
+            padding-bottom: 120px;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            animation: stepSlideIn 1s ease-out forwards;
+            opacity: 0;
+        }
+
+        .workflow-step:nth-child(1) { animation-delay: 0.2s; }
+        .workflow-step:nth-child(2) { animation-delay: 0.4s; }
+        .workflow-step:nth-child(3) { animation-delay: 0.6s; }
+        .workflow-step:nth-child(4) { animation-delay: 0.8s; }
+        .workflow-step:nth-child(5) { animation-delay: 1.0s; }
+        .workflow-step:nth-child(6) { animation-delay: 1.2s; }
+
+        @keyframes stepSlideIn {
+            0% { opacity: 0; transform: translateX(-50px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .step-box {
+            width: 320px;
+            height: 90px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: left;
+            padding: 15px 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: boxGlow 3s infinite alternate;
+        }
+
+        .step-box:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        .step-box::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96c93d, #f093fb, #ffeaa7);
+            border-radius: 17px;
+            z-index: -1;
+            animation: borderRotate 3s linear infinite;
+        }
+
+        @keyframes borderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes boxGlow {
+            0% { box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+            100% { box-shadow: 0 0 40px rgba(255,255,255,0.6); }
+        }
+
+        .llm-step {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .voice-step {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+        }
+
+        .music-step {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+        }
+
+        .dalle-step {
+            background: linear-gradient(45deg, #43e97b, #38f9d7);
+        }
+
+        .diffusion-step {
+            background: linear-gradient(45deg, #fa709a, #fee140);
+        }
+
+        .youtube-step {
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+        }
+
+        .step-icon {
+            font-size: 32px;
+            margin-right: 15px;
+            animation: iconBounce 2s infinite ease-in-out;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            line-height: 1.3;
+        }
+
+        .step-title {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .step-description {
+            font-size: 12px;
+            opacity: 0.9;
+            font-weight: normal;
+        }
+
+        .step-icon:nth-child(odd) { animation-delay: 0.5s; }
+
+        @keyframes iconBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .arrow {
+            font-size: 40px;
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+            animation: arrowPulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .data-flow {
+            position: absolute;
+            width: 4px;
+            height: 40px;
+            background: linear-gradient(180deg, transparent, #00ffff, transparent);
+            animation: dataFlowing 2s infinite linear;
+        }
+
+        @keyframes dataFlowing {
+            0% { transform: translateY(-50px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(50px); opacity: 0; }
+        }
+
+        .processing-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid rgba(255,255,255,0.8);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .output-preview {
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 220px;
+            height: 320px;
+            background: rgba(0,0,0,0.9);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            animation: previewGlow 2s infinite alternate;
+        }
+
+        @keyframes previewGlow {
+            0% { box-shadow: 0 0 20px #00ffff; }
+            100% { box-shadow: 0 0 40px #00ffff, 0 0 60px #00ffff; }
+        }
+
+        .preview-screen {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(45deg, #333, #666);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 15px;
+            animation: screenFlicker 2s infinite;
+        }
+
+        @keyframes screenFlicker {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .preview-stats {
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .stat-line {
+            margin: 5px 0;
+            opacity: 0;
+            animation: statAppear 0.5s ease-out forwards;
+        }
+
+        .stat-line:nth-child(1) { animation-delay: 2s; }
+        .stat-line:nth-child(2) { animation-delay: 2.2s; }
+        .stat-line:nth-child(3) { animation-delay: 2.4s; }
+        .stat-line:nth-child(4) { animation-delay: 2.6s; }
+        .stat-line:nth-child(5) { animation-delay: 2.8s; }
+
+        @keyframes statAppear {
+            0% { opacity: 0; transform: translateX(-10px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff00, #00ffff, #ff00ff);
+            border-radius: 10px;
+            animation: progressFlow 4s infinite ease-in-out;
+        }
+
+        @keyframes progressFlow {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            color: white;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            animation: clickPulse 2s infinite;
+        }
+
+        @keyframes clickPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .floating-particles {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: particleFloat 4s infinite linear;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="workflow-container" onclick="openGitHub()">
+        <!-- Title -->
+        <div class="title-header">
+            <div class="main-title">AI VIDEO GENERATION PIPELINE</div>
+            <div class="subtitle">Automated Content Creation Workflow</div>
+        </div>
+
+        <!-- Workflow Steps -->
+        <div class="workflow-path">
+            <div class="workflow-step">
+                <div class="step-box llm-step">
+                    <div class="step-icon">🧠</div>
+                    <div class="step-content">
+                        <div class="step-title">LLM Story Generator</div>
+                        <div class="step-description">Suggesting creative ideas & scripts</div>
+                    </div>
+                    <div class="processing-indicator"></div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+            <div class="data-flow" style="left: 50%; animation-delay: 0.5s;"></div>
+
+            <div class="workflow-step">
+                <div class="step-box voice-step">
+                    <div class="step-icon">🎙️</div>
+                    <div class="step-content">
+                        <div class="step-title">Voice AI Narration</div>
+                        <div class="step-description">Recording emotional voiceover</div>
+                    </div>
+                    <div class="processing-indicator"></div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+            <div class="data-flow" style="left: 50%; animation-delay: 1s;"></div>
+
+            <div class="workflow-step">
+                <div class="step-box music-step">
+                    <div class="step-icon">🎵</div>
+                    <div class="step-content">
+                        <div class="step-title">Music AI Composer</div>
+                        <div class="step-description">Crafting tailored soundtracks</div>
+                    </div>
+                    <div class="processing-indicator"></div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+            <div class="data-flow" style="left: 50%; animation-delay: 1.5s;"></div>
+
+            <div class="workflow-step">
+                <div class="step-box dalle-step">
+                    <div class="step-icon">🎨</div>
+                    <div class="step-content">
+                        <div class="step-title">DALL·E Image Generation</div>
+                        <div class="step-description">Creating vivid scene visuals</div>
+                    </div>
+                    <div class="processing-indicator"></div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+            <div class="data-flow" style="left: 50%; animation-delay: 2s;"></div>
+
+            <div class="workflow-step">
+                <div class="step-box diffusion-step">
+                    <div class="step-icon">✨</div>
+                    <div class="step-content">
+                        <div class="step-title">Diffusion Model Polish</div>
+                        <div class="step-description">Enhancing visual quality</div>
+                    </div>
+                    <div class="processing-indicator"></div>
+                </div>
+            </div>
+
+            <div class="arrow">↓</div>
+            <div class="data-flow" style="left: 50%; animation-delay: 2.5s;"></div>
+
+            <div class="workflow-step">
+                <div class="step-box youtube-step">
+                    <div class="step-icon">📺</div>
+                    <div class="step-content">
+                        <div class="step-title">🔴 YouTube Upload</div>
+                        <div class="step-description">Scheduling 2 videos daily</div>
+                    </div>
+                    <div class="processing-indicator"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Output Preview -->
+        <div class="output-preview">
+            <div class="preview-screen">🎬</div>
+            <div class="preview-stats">
+                <div class="stat-line">📊 Processing: 98%</div>
+                <div class="stat-line">⏱️ Duration: 5:42</div>
+                <div class="stat-line">🔊 Audio: Synced</div>
+                <div class="stat-line">🎨 Visuals: 4K</div>
+                <div class="stat-line">📅 Upload: Scheduled</div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+
+        <!-- Floating Particles -->
+        <div class="floating-particles" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="floating-particles" style="left: 20%; animation-delay: 0.5s;"></div>
+        <div class="floating-particles" style="left: 30%; animation-delay: 1s;"></div>
+        <div class="floating-particles" style="left: 40%; animation-delay: 1.5s;"></div>
+        <div class="floating-particles" style="left: 60%; animation-delay: 2s;"></div>
+        <div class="floating-particles" style="left: 70%; animation-delay: 2.5s;"></div>
+        <div class="floating-particles" style="left: 80%; animation-delay: 3s;"></div>
+        <div class="floating-particles" style="left: 90%; animation-delay: 3.5s;"></div>
+
+        <!-- Click Hint -->
+        <div class="click-hint">Click to view project repository →</div>
+    </div>
+
+    <script>
+        function openGitHub() {
+            // Replace with your actual GitHub repo URL
+            window.open('https://github.com/yourusername/ai-automation-war', '_blank');
+        }
+
+        // Add dynamic data flows
+        function createDataFlow() {
+            const container = document.querySelector('.workflow-container');
+            const dataFlow = document.createElement('div');
+            dataFlow.className = 'data-flow';
+            dataFlow.style.left = Math.random() * 60 + 20 + '%';
+            dataFlow.style.animationDelay = Math.random() * 2 + 's';
+            container.appendChild(dataFlow);
+            
+            setTimeout(() => {
+                dataFlow.remove();
+            }, 2000);
+        }
+
+        setInterval(createDataFlow, 1000);
+
+        // Update processing indicators
+        function updateProcessing() {
+            const indicators = document.querySelectorAll('.processing-indicator');
+            indicators.forEach((indicator, index) => {
+                setTimeout(() => {
+                    indicator.style.borderTopColor = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96c93d', '#f093fb', '#ff0000'][index];
+                }, index * 500);
+            });
+        }
+
+        setInterval(updateProcessing, 3000);
+
+        // Dynamic stats update
+        function updateStats() {
+            const stats = [
+                '📊 Processing: ' + (90 + Math.floor(Math.random() * 10)) + '%',
+                '⏱️ Duration: ' + Math.floor(Math.random() * 10 + 3) + ':' + Math.floor(Math.random() * 60).toString().padStart(2, '0'),
+                '🔊 Audio: ' + (Math.random() > 0.5 ? 'Synced' : 'Processing'),
+                '🎨 Visuals: ' + (Math.random() > 0.5 ? '4K' : 'HD'),
+                '📅 Upload: ' + (Math.random() > 0.5 ? 'Scheduled' : 'Pending')
+            ];
+            
+            const statElements = document.querySelectorAll('.stat-line');
+            statElements.forEach((el, index) => {
+                if (stats[index]) {
+                    el.textContent = stats[index];
+                }
+            });
+        }
+
+        setInterval(updateStats, 4000);
+
+        // Add floating particles dynamically
+        function createParticle() {
+            const container = document.querySelector('.workflow-container');
+            const particle = document.createElement('div');
+            particle.className = 'floating-particles';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 4 + 's';
+            container.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 4000);
+        }
+
+        setInterval(createParticle, 800);
+    </script>
+</body>
+</html>
