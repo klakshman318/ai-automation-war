@@ -1,6 +1,6 @@
 # AI Automation War - Interactive Visualizations
 
-## The Great AI Automation War: How Silicon Valley Is Fighting Back Against the Machines
+## The Great AI Automation War: Navigating the Rise of AI and Fighting Back Against the Automata
 [Read the full article with interactive visualizations](./ARTICLE.md)
 
 ## 🚀 Live Demos
