@@ -1,0 +1,11 @@
+{
+  "rewrites": [
+    { "source": "/digital-battlefield", "destination": "/digital-battlefield/index.html" },
+    { "source": "/nighttime-workspace", "destination": "/nighttime-workspace/index.html" },
+    { "source": "/video-pipeline", "destination": "/video-pipeline/index.html" },
+    { "source": "/automation-wins", "destination": "/automation-wins/index.html" },
+    { "source": "/battlegrounds-network", "destination": "/battlegrounds-network/index.html" },
+    { "source": "/balance-scale", "destination": "/balance-scale/index.html" },
+    { "source": "/path-forward", "destination": "/path-forward/index.html" }
+  ]
+}
