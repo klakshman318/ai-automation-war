@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Broader Impact - Human vs AI Balance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .balance-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .title-overlay {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: white;
+            z-index: 100;
+        }
+
+        .main-title {
+            font-size: 2.8rem;
+            font-weight: bold;
+            text-shadow: 0 0 30px rgba(0,0,0,0.5);
+            margin-bottom: 0.5rem;
+            animation: titleFloat 3s infinite ease-in-out;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.9;
+            text-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
+
+        /* Balance Scale Structure */
+        .scale-base {
+            position: absolute;
+            bottom: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 200px;
+            background: linear-gradient(45deg, #8b4513, #a0522d);
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: baseStability 6s infinite ease-in-out;
+        }
+
+        @keyframes baseStability {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            50% { transform: translateX(-50%) rotate(1deg); }
+        }
+
+        .scale-arm {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 8px;
+            background: linear-gradient(90deg, #c0392b, #e74c3c, #c0392b);
+            border-radius: 4px;
+            animation: scaleBalance 8s infinite ease-in-out;
+            transform-origin: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        @keyframes scaleBalance {
+            0% { transform: translateX(-50%) rotate(-3deg); }
+            25% { transform: translateX(-50%) rotate(2deg); }
+            50% { transform: translateX(-50%) rotate(-1deg); }
+            75% { transform: translateX(-50%) rotate(3deg); }
+            100% { transform: translateX(-50%) rotate(-3deg); }
+        }
+
+        .scale-fulcrum {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: #34495e;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        /* Scale Plates */
+        .scale-plate {
+            position: absolute;
+            width: 200px;
+            height: 40px;
+            background: linear-gradient(45deg, #ecf0f1, #bdc3c7);
+            border-radius: 100px;
+            border: 3px solid #95a5a6;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            animation: plateFloat 8s infinite ease-in-out;
+        }
+
+        .human-plate {
+            top: 30px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .ai-plate {
+            top: 50px;
+            right: -100px;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes plateFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Human Side */
+        .human-silhouette {
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 120px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            border-radius: 40px 40px 20px 20px;
+            animation: humanPulse 3s infinite ease-in-out;
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        .human-silhouette::before {
+            content: '👤';
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 40px;
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        @keyframes humanPulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.05); }
+        }
+
+        /* AI Code Side */
+        .ai-code-block {
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            font-size: 8px;
+            line-height: 1.2;
+            animation: codeGlow 3s infinite alternate;
+            overflow: hidden;
+        }
+
+        @keyframes codeGlow {
+            0% { box-shadow: 0 0 20px rgba(0, 255, 0, 0.5); }
+            100% { box-shadow: 0 0 40px rgba(0, 255, 0, 0.8); }
+        }
+
+        .code-line {
+            opacity: 0;
+            animation: codeTypeIn 0.5s ease-out forwards;
+            margin: 1px 0;
+        }
+
+        .code-line:nth-child(1) { animation-delay: 0.2s; }
+        .code-line:nth-child(2) { animation-delay: 0.4s; }
+        .code-line:nth-child(3) { animation-delay: 0.6s; }
+        .code-line:nth-child(4) { animation-delay: 0.8s; }
+        .code-line:nth-child(5) { animation-delay: 1.0s; }
+        .code-line:nth-child(6) { animation-delay: 1.2s; }
+        .code-line:nth-child(7) { animation-delay: 1.4s; }
+
+        @keyframes codeTypeIn {
+            0% { opacity: 0; width: 0; }
+            100% { opacity: 1; width: 100%; }
+        }
+
+        /* Currency Symbols */
+        .currency-symbol {
+            position: absolute;
+            font-size: 40px;
+            color: rgba(255, 215, 0, 0.9);
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            animation: currencyFloat 6s infinite ease-in-out;
+        }
+
+        .currency-symbol:nth-child(odd) {
+            animation-direction: reverse;
+        }
+
+        @keyframes currencyFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .currency-1 { top: 20%; left: 15%; animation-delay: 0s; }
+        .currency-2 { top: 30%; right: 15%; animation-delay: 1s; }
+        .currency-3 { bottom: 30%; left: 20%; animation-delay: 2s; }
+        .currency-4 { bottom: 20%; right: 20%; animation-delay: 3s; }
+        .currency-5 { top: 50%; left: 10%; animation-delay: 4s; }
+        .currency-6 { top: 60%; right: 10%; animation-delay: 5s; }
+
+        /* Partnership Icons */
+        .partnership-icon {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            animation: partnershipBounce 4s infinite ease-in-out;
+            box-shadow: 0 5px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .partnership-icon:nth-child(even) {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        .partnership-icon:nth-child(3n) {
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            box-shadow: 0 5px 20px rgba(155, 89, 182, 0.4);
+        }
+
+        @keyframes partnershipBounce {
+            0%, 100% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.1) translateY(-10px); }
+        }
+
+        .partnership-1 { top: 15%; left: 25%; animation-delay: 0s; }
+        .partnership-2 { top: 25%; right: 25%; animation-delay: 0.5s; }
+        .partnership-3 { bottom: 25%; left: 30%; animation-delay: 1s; }
+        .partnership-4 { bottom: 15%; right: 30%; animation-delay: 1.5s; }
+        .partnership-5 { top: 40%; left: 5%; animation-delay: 2s; }
+        .partnership-6 { top: 70%; right: 5%; animation-delay: 2.5s; }
+
+        /* Impact Metrics */
+        .impact-metric {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 15px;
+            padding: 15px 20px;
+            color: white;
+            text-align: center;
+            animation: metricGlow 3s infinite alternate;
+        }
+
+        @keyframes metricGlow {
+            0% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+            100% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.6); }
+        }
+
+        .metric-1 {
+            top: 120px;
+            left: 100px;
+            animation-delay: 0s;
+        }
+
+        .metric-2 {
+            top: 120px;
+            right: 100px;
+            animation-delay: 0.5s;
+        }
+
+        .metric-3 {
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation-delay: 1s;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ff88;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* Trend Arrows */
+        .trend-arrow {
+            position: absolute;
+            font-size: 60px;
+            animation: arrowPulse 2s infinite ease-in-out;
+        }
+
+        .trend-up {
+            top: 180px;
+            left: 200px;
+            color: #00ff88;
+            transform: rotate(-45deg);
+        }
+
+        .trend-down {
+            top: 180px;
+            right: 200px;
+            color: #ff6b6b;
+            transform: rotate(45deg);
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { opacity: 0.7; transform: scale(1) rotate(-45deg); }
+            50% { opacity: 1; transform: scale(1.1) rotate(-45deg); }
+        }
+
+        .trend-down {
+            animation-name: arrowPulseDown;
+        }
+
+        @keyframes arrowPulseDown {
+            0%, 100% { opacity: 0.7; transform: scale(1) rotate(45deg); }
+            50% { opacity: 1; transform: scale(1.1) rotate(45deg); }
+        }
+
+        /* Balance Equation */
+        .balance-equation {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            animation: equationPulse 4s infinite ease-in-out;
+            text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+
+        @keyframes equationPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+        }
+
+        .click-hint {
+            position: absolute;
+            top: 100px;
+            right: 50px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            opacity: 0.8;
+            animation: clickPulse 2s infinite;
+        }
+
+        @keyframes clickPulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        /* Floating particles for atmosphere */
+        .floating-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: particleFloat 8s infinite linear;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="balance-container" onclick="openGitHub()">
+        <!-- Title -->
+        <div class="title-overlay">
+            <div class="main-title">THE BROADER IMPACT</div>
+            <div class="subtitle">Balancing Human Creativity & AI Automation</div>
+        </div>
+
+        <!-- Balance Scale Structure -->
+        <div class="scale-base"></div>
+        <div class="scale-fulcrum"></div>
+        <div class="scale-arm"></div>
+
+        <!-- Human Side -->
+        <div class="scale-plate human-plate">
+            <div class="human-silhouette"></div>
+        </div>
+
+        <!-- AI Side -->
+        <div class="scale-plate ai-plate">
+            <div class="ai-code-block">
+                <div class="code-line">if (automation) {</div>
+                <div class="code-line">  scale.tip();</div>
+                <div class="code-line">  revenue += 1B;</div>
+                <div class="code-line">  jobs.transform();</div>
+                <div class="code-line">} else {</div>
+                <div class="code-line">  humans.create();</div>
+                <div class="code-line">}</div>
+            </div>
+        </div>
+
+        <!-- Currency Symbols -->
+        <div class="currency-symbol currency-1">💰</div>
+        <div class="currency-symbol currency-2">💲</div>
+        <div class="currency-symbol currency-3">💴</div>
+        <div class="currency-symbol currency-4">💵</div>
+        <div class="currency-symbol currency-5">💶</div>
+        <div class="currency-symbol currency-6">💷</div>
+
+        <!-- Partnership Icons -->
+        <div class="partnership-icon partnership-1">🤝</div>
+        <div class="partnership-icon partnership-2">🔗</div>
+        <div class="partnership-icon partnership-3">⚖️</div>
+        <div class="partnership-icon partnership-4">🛡️</div>
+        <div class="partnership-icon partnership-5">📊</div>
+        <div class="partnership-icon partnership-6">🎯</div>
+
+        <!-- Impact Metrics -->
+        <div class="impact-metric metric-1">
+            <div class="metric-value">$1.3B</div>
+            <div class="metric-label">Platform Defense<br>Investment</div>
+        </div>
+
+        <div class="impact-metric metric-2">
+            <div class="metric-value">Billions</div>
+            <div class="metric-label">Human Hours<br>Saved</div>
+        </div>
+
+        <div class="impact-metric metric-3">
+            <div class="metric-value">98.5%</div>
+            <div class="metric-label">Authenticity<br>Verification</div>
+        </div>
+
+        <!-- Trend Arrows -->
+        <div class="trend-arrow trend-up">↗️</div>
+        <div class="trend-arrow trend-down">↘️</div>
+
+        <!-- Balance Equation -->
+        <div class="balance-equation">
+            HUMAN CREATIVITY ⚖️ AI EFFICIENCY = FUTURE BALANCE
+        </div>
+
+        <!-- Floating Particles -->
+        <div class="floating-particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="floating-particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="floating-particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="floating-particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="floating-particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="floating-particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="floating-particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="floating-particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="floating-particle" style="left: 90%; animation-delay: 8s;"></div>
+
+        <!-- Click Hint -->
+        <div class="click-hint">Click to view the project repository →</div>
+    </div>
+
+    <script>
+        function openGitHub() {
+            // Replace with your actual GitHub repo URL
+            window.open('https://github.com/yourusername/ai-automation-war', '_blank');
+        }
+
+        // Dynamic balance scale tilting
+        function adjustScaleBalance() {
+            const scaleArm = document.querySelector('.scale-arm');
+            const humanPlate = document.querySelector('.human-plate');
+            const aiPlate = document.querySelector('.ai-plate');
+            
+            // Random tilt between -5 and 5 degrees
+            const tilt = (Math.random() - 0.5) * 10;
+            
+            scaleArm.style.transform = `translateX(-50%) rotate(${tilt}deg)`;
+            
+            // Adjust plate heights based on tilt
+            humanPlate.style.transform = `translateY(${tilt * 2}px)`;
+            aiPlate.style.transform = `translateY(${-tilt * 2}px)`;
+        }
+
+        // Update metrics dynamically
+        function updateMetrics() {
+            const metrics = [
+                { selector: '.metric-1 .metric-value', base: 1.3, variance: 0.2, suffix: 'B' },
+                { selector: '.metric-3 .metric-value', base: 98.5, variance: 1.5, suffix: '%' }
+            ];
+            
+            metrics.forEach(metric => {
+                const element = document.querySelector(metric.selector);
+                if (element) {
+                    const newValue = metric.base + (Math.random() - 0.5) * metric.variance;
+                    element.textContent = newValue.toFixed(1) + metric.suffix;
+                }
+            });
+        }
+
+        // Dynamic code updates
+        function updateAICode() {
+            const codeLines = [
+                'revenue += 1.3B;',
+                'efficiency *= 10;',
+                'jobs.adapt();',
+                'platforms.defend();',
+                'humans.innovate();',
+                'balance.seek();'
+            ];
+            
+            const codeElements = document.querySelectorAll('.code-line');
+            
+            const randomIndex = Math.floor(Math.random() * codeElements.length);
+            const randomLine = codeLines[Math.floor(Math.random() * codeLines.length)];
+            
+            if (codeElements[randomIndex] && Math.random() > 0.7) {
+                const originalText = codeElements[randomIndex].textContent;
+                codeElements[randomIndex].textContent = randomLine;
+                
+                setTimeout(() => {
+                    codeElements[randomIndex].textContent = originalText;
+                }, 2000);
+            }
+        }
+
+        // Currency symbols value updates
+        function rotateCurrencySymbols() {
+            const symbols = ['💰', '💲', '💴', '💵', '💶', '💷', '🪙', '💸'];
+            const currencyElements = document.querySelectorAll('.currency-symbol');
+            
+            currencyElements.forEach((element, index) => {
+                if (Math.random() > 0.8) {
+                    const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                    element.textContent = randomSymbol;
+                }
+            });
+        }
+
+        // Add floating particles periodically
+        function createFloatingParticle() {
+            const container = document.querySelector('.balance-container');
+            const particle = document.createElement('div');
+            particle.className = 'floating-particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = '0s';
+            container.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 8000);
+        }
+
+        // Start dynamic updates
+        setInterval(adjustScaleBalance, 4000);
+        setInterval(updateMetrics, 6000);
+        setInterval(updateAICode, 5000);
+        setInterval(rotateCurrencySymbols, 3000);
+        setInterval(createFloatingParticle, 1000);
+
+        // Initial balance
+        setTimeout(adjustScaleBalance, 1000);
+    </script>
+</body>
+</html>
